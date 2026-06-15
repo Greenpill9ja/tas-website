@@ -11,13 +11,14 @@
     "typecheck": "tsc --noEmit",
     "check": "bun run lint && bun run typecheck && bun run build",
     "validate:quick": "bun run lint && bun run typecheck",
-    "agentic:check": "bun run check:design-tokens && bun run validate:quick",
+    "agentic:check": "bun run check:browser-verification-policy && bun run check:design-tokens && bun run validate:quick",
     "check:design-tokens": "node scripts/check-design-tokens.mjs",
-    "agentic:browser-proof": "bun run validate:smoke",
+    "agentic:browser-proof": "bun scripts/require-authenticated-browser-qa.mjs && bun run validate:smoke",
     "agentic:verify": "bun run validate:smoke",
     "start:smoke": "next start --hostname 127.0.0.1 --port 3300",
     "test:smoke": "bun run build && playwright test",
-    "validate:smoke": "bun run check && playwright test"
+    "validate:smoke": "bun run check && playwright test",
+    "check:browser-verification-policy": "bun scripts/check-browser-verification-policy.mjs"
   },
   "engines": {
     "node": "22.22.1",
