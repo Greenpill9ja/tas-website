@@ -75,7 +75,7 @@ export default function Hero() {
                     </div>
 
                     <div className="flex items-center gap-6">
-                        <a href="https://x.com/techandsunhub" target="_blank" rel="noopener noreferrer" className="text-dark/60 hover:text-primary transition-colors">
+                        <a href="https://x.com/techandsunhubs" target="_blank" rel="noopener noreferrer" className="text-dark/60 hover:text-primary transition-colors">
                             <Twitter className="h-7 w-7" />
                         </a>
                         <a href="https://github.com/Greenpill9ja" target="_blank" rel="noopener noreferrer" className="text-dark/60 hover:text-primary transition-colors">
