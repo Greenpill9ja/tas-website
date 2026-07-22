@@ -63,6 +63,8 @@ export default function RootLayout({
               sameAs: [
                 "https://x.com/techandsunhub",
                 "https://github.com/Greenpill9ja",
+                "https://linkedin.com",
+                "https://youtube.com",
               ],
             }),
           }}

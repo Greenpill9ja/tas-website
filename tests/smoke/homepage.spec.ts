@@ -108,7 +108,7 @@ test("homepage renders core sections without runtime errors", async ({ page }) =
   await expect(page.getByRole("heading", { name: /The Stack/i })).toBeVisible();
   await expect(page.getByRole("heading", { name: /2026 Roadmap/i })).toBeVisible();
   await expect(page.getByRole("heading", { name: /Meet the team/i })).toBeVisible();
-  await expect(page.getByRole("heading", { name: /Hub Activities/i })).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: /Hub Activities & Education/i })).toBeVisible();
   await expect(page.getByLabel("Name")).toBeVisible();
   await expect(page.getByLabel("Email")).toBeVisible();
   await expect(page.getByLabel("Message")).toBeVisible();
@@ -118,7 +118,7 @@ test("homepage renders core sections without runtime errors", async ({ page }) =
   await captureAgenticProof(page, "homepage-desktop", runtimeErrors, [
     "core public sections visible",
     "contact labels visible",
-    "stale Hub Activities and Ethereum copy absent",
+    "Hub Activities section visible",
     "Anthony Amio LinkedIn link accessible by label",
   ]);
 
