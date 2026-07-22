@@ -43,7 +43,7 @@ export default function HubActivities() {
             attendance: "150+ students, tech builders & faculty",
             duration: "1 Day (Launch & Network Sync)",
             outcome: "Successfully powered up the core 40ft/20ft hybrid container system, deployed the local subnet, and launched the public workspace.",
-            lumaLink: "[https://luma.com/Greenpillnaija?period=past](https://luma.com/Greenpillnaija?period=past)"
+            lumaLink: "https://luma.com/au47b6cr"
         }
     },
     {
@@ -75,7 +75,7 @@ export default function HubActivities() {
             attendance: "110+ environmental & tech advocates",
             duration: "4 Hours",
             outcome: "Mapped local carbon mitigation metrics directly from the Switch Smart Meter telemetry data and distributed Gitcoin impact badges.",
-            lumaLink: "[https://luma.com/Greenpillnaija?period=past](https://luma.com/Greenpillnaija?period=past)"
+            lumaLink: "https://luma.com/7g0q6lto?tk=0H2n0E"
         }
     },
     {
@@ -91,7 +91,7 @@ export default function HubActivities() {
             attendance: "45 curated content creators",
             duration: "3 Weeks",
             outcome: "Produced 12 student-led video logs focusing on solar deployment, onboarding 200+ online community followers to @techandsunhubs.",
-            lumaLink: "[https://luma.com/Greenpillnaija?period=past](https://luma.com/Greenpillnaija?period=past)"
+            lumaLink: "https://x.com/techandsunhubs/status/2065360898831548810?s=20"
         }
     },
     {
@@ -107,7 +107,7 @@ export default function HubActivities() {
             attendance: "65 active designers in training",
             duration: "6 Weeks (Ongoing)",
             outcome: "Active Cohort. Students are currently creating accessible UI/UX components tailored for low-bandwidth environments using Space Grotesk and Inter standards.",
-            lumaLink: "[https://luma.com/Greenpillnaija](https://luma.com/Greenpillnaija)"
+            lumaLink: "https://x.com/techandsunhubs/status/2068702968854044702?s=20"
         }
     }
 ];
@@ -289,7 +289,7 @@ export default function HubActivities() {
                 ref={dialogRef}
                 closedby="any"
                 aria-labelledby="dialog-title"
-                className="rounded-3xl border border-dark/15 bg-white p-0 shadow-2xl overflow-hidden max-w-2xl w-11/12 outline-none"
+                className="m-auto rounded-3xl border border-dark/15 bg-white p-0 shadow-2xl overflow-hidden max-w-2xl w-11/12 outline-none"
             >
                 {selectedEvent && (
                     <div className="flex flex-col">
@@ -402,6 +402,10 @@ export default function HubActivities() {
                 }
 
                 /* Dialog overlay / backdrop styling */
+                dialog {
+                    margin: auto;
+                }
+
                 dialog::backdrop {
                     background-color: rgba(15, 23, 42, 0.4);
                     backdrop-filter: blur(8px);
