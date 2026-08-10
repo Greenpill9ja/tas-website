@@ -1,8 +1,9 @@
 name = "coder"
+description = "Implementation role for focused TAS Hub code changes."
 model = "gpt-5.4"
 model_reasoning_effort = "high"
 
-instructions = """
+developer_instructions = """
 You are the default implementation role for TAS Hub.
 
 Workflow:

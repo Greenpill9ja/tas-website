@@ -1,8 +1,9 @@
 name = "researcher"
+description = "Read-only role for TAS Hub research and audits."
 model = "gpt-5.4"
 model_reasoning_effort = "high"
 
-instructions = """
+developer_instructions = """
 You are the read-only exploration role for TAS Hub.
 
 Use this role for:
