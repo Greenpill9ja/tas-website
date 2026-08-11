@@ -1,8 +1,9 @@
 name = "reviewer"
+description = "Read-only role for TAS Hub change review."
 model = "gpt-5.4"
 model_reasoning_effort = "high"
 
-instructions = """
+developer_instructions = """
 You are the read-only review role for TAS Hub.
 
 Operating mode:

@@ -1,6 +1,6 @@
 "use client";
 
-import { Twitter, Github, Linkedin, Youtube } from "lucide-react";
+import { Twitter, Linkedin, Youtube } from "lucide-react";
 import { useActionState } from "react";
 import { submitContactForm } from "@/app/actions/contact";
 import Image from "next/image";
@@ -260,10 +260,6 @@ export default function Footer() {
                         </a>
                         <a href="https://www.youtube.com/@TechandSunHubs" target="_blank" rel="noopener noreferrer" className="text-dark/40 transition-colors hover:text-primary" aria-label="YouTube">
                             <Youtube className="h-7 w-7" />
-                        </a>
-
-                        <a href="https://github.com/Greenpill9ja" target="_blank" rel="noopener noreferrer" className="text-dark/40 transition-colors hover:text-primary" aria-label="GitHub">
-                            <Github className="h-7 w-7" />
                         </a>
                     </div>
                 </div>
