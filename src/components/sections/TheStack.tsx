@@ -92,7 +92,7 @@ export default function TheStack() {
                     </p>
                 </div>
 
-                <div className="grid w-full gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <div className="grid w-full gap-6 md:grid-cols-2 lg:grid-cols-6">
                     {parts.map((item, i) => (
                         <motion.button
                             type="button"
@@ -104,7 +104,7 @@ export default function TheStack() {
                             viewport={{ once: true, margin: "-50px" }}
                             transition={{ duration: 0.5, delay: i * 0.08 }}
                             whileHover={{ scale: 1.015 }}
-                            className={`relative flex min-h-64 w-full flex-col justify-between rounded-3xl border border-black/5 p-6 text-left shadow-xl transition-transform transition-shadow hover:shadow-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary ${item.color}`}
+                            className={`relative flex min-h-64 w-full flex-col justify-between rounded-3xl border border-black/5 p-6 text-left shadow-xl transition-transform transition-shadow hover:shadow-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary lg:col-span-2 ${i === 3 ? "lg:col-start-2" : ""} ${i === 4 ? "lg:col-start-4" : ""} ${item.color}`}
                         >
                             <div className="absolute right-4 top-4 flex items-center gap-2">
                                 <motion.div
