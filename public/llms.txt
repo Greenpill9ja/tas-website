@@ -4,6 +4,7 @@ TAS Hub is a public Next.js site for The Agentic School / TAS Hub public narrati
 
 Public surfaces:
 - Public homepage and site sections.
+- Public About page covering the NGO mission, free hub services, history, hub model, and footprint.
 - Public static assets served from `public`.
 - Public contact or call-to-action surfaces intentionally rendered on the site.
 

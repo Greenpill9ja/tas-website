@@ -75,6 +75,13 @@ export default function Hero() {
                     </div>
 
                     <div className="flex items-center gap-6">
+                        <a
+                            href="/about"
+                            className="font-heading text-sm font-bold text-dark/60 transition-colors hover:text-primary"
+                            aria-label="About Tech and Sun"
+                        >
+                            About us
+                        </a>
                         <a href="https://x.com/techandsunhubs" target="_blank" rel="noopener noreferrer" className="text-dark/60 hover:text-primary transition-colors">
                             <Twitter className="h-7 w-7" />
                         </a>
