@@ -247,9 +247,12 @@ export default function Footer() {
                 </section>
 
                 <div className="mt-8 flex w-full flex-col items-center justify-between gap-4 border-t border-dark/10 pt-8 md:flex-row">
-                    <p className="font-body text-sm font-medium text-dark/50">
-                        Tech and Sun © 2026.
-                    </p>
+                    <div className="flex items-center gap-3">
+                        <Image src="/Tas Logo-green.png" alt="TAS Logo" width={40} height={40} className="h-10 w-10 rounded-full" />
+                        <p className="font-body text-sm font-medium text-dark/50">
+                            Tech and Sun © 2026.
+                        </p>
+                    </div>
                     <div className="flex items-center gap-4">
                         <a href="https://x.com/techandsunhubs" target="_blank" rel="noopener noreferrer" className="text-dark/40 transition-colors hover:text-primary" aria-label="Twitter">
                             <Twitter className="h-7 w-7" />

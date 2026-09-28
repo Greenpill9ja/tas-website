@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Twitter, Youtube } from "lucide-react";
 import { useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const floatingIconCards = [
     {
@@ -75,6 +76,9 @@ export default function Hero() {
                     </div>
 
                     <div className="flex items-center gap-6">
+                        <Link href="/about" className="font-heading text-base font-bold text-dark/80 hover:text-primary transition-colors">
+                            About us
+                        </Link>
                         <a href="https://x.com/techandsunhubs" target="_blank" rel="noopener noreferrer" className="text-dark/60 hover:text-primary transition-colors">
                             <Twitter className="h-7 w-7" />
                         </a>
