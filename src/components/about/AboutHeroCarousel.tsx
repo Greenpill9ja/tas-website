@@ -82,7 +82,7 @@ export default function AboutHeroCarousel() {
 
     return (
         <div className="w-full" aria-roledescription="carousel" aria-label="TAS Hub journey, construction, and launch story">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-[2.5rem] bg-dark/95 shadow-xl">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-feature bg-dark/95 shadow-xl">
                 {currentMedia.isVideo ? (
                     <video
                         key={currentMedia.src}
@@ -151,7 +151,7 @@ export default function AboutHeroCarousel() {
             </div>
 
             {/* Single horizontal straight line thumbnail strip bounded within main frame width with soft edge shadows */}
-            <div className="relative mt-4 w-full overflow-hidden before:pointer-events-none before:absolute before:bottom-0 before:left-0 before:top-0 before:z-10 before:w-8 before:bg-gradient-to-r before:from-[#a5d5f5] before:to-transparent after:pointer-events-none after:absolute after:bottom-0 after:right-0 after:top-0 after:z-10 after:w-10 after:bg-gradient-to-l after:from-[#a5d5f5] after:to-transparent">
+            <div className="relative mt-4 w-full overflow-hidden before:pointer-events-none before:absolute before:bottom-0 before:left-0 before:top-0 before:z-10 before:w-8 before:bg-gradient-to-r before:from-tas-sky before:to-transparent after:pointer-events-none after:absolute after:bottom-0 after:right-0 after:top-0 after:z-10 after:w-10 after:bg-gradient-to-l after:from-tas-sky after:to-transparent">
                 <div className="flex w-full items-center gap-2 overflow-x-auto px-1 py-1.5 scrollbar-none snap-x focus-visible:outline-none">
                     {photos.map((photo, index) => (
                         <button
@@ -184,5 +184,3 @@ export default function AboutHeroCarousel() {
         </div>
     );
 }
-
-
