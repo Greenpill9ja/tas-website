@@ -7,6 +7,10 @@
   --color-vibrant: #E5F1FF;
   --color-dark: #0F172A;
   --color-light-green: #5D9056;
+  --color-tas-sky: #A5D5F5;
+
+  --radius-feature: 2.5rem;
+  --radius-callout: 2.4rem;
   
   --font-heading: var(--font-space-grotesk);
   --font-body: var(--font-inter);

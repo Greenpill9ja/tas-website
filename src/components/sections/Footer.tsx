@@ -257,7 +257,7 @@ export default function Footer() {
                         <a href="https://x.com/techandsunhubs" target="_blank" rel="noopener noreferrer" className="text-dark/40 transition-colors hover:text-primary" aria-label="Twitter">
                             <Twitter className="h-7 w-7" />
                         </a>
-                        
+
                         <a href="https://www.linkedin.com/company/tech-and-sun/" target="_blank" rel="noopener noreferrer" className="text-dark/40 transition-colors hover:text-primary" aria-label="LinkedIn">
                             <Linkedin className="h-7 w-7" />
                         </a>
