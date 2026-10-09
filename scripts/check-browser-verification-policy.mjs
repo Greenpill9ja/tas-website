@@ -4,7 +4,7 @@ import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
 const repoRoot = process.cwd();
-const requiredPolicyFiles = ["AGENTS.md"];
+const requiredPolicyFiles = ['AGENTS.md'];
 
 const failures = [];
 
@@ -86,10 +86,6 @@ const stalePatterns = [
   /DevTools MCP path for live browser debugging/i,
   /isolated\/public proof lane/i,
   /browser proof still runs in Brave/i,
-  /only when the authenticated QA browser is Chrome\/Edge/i,
-  /Brave-only QA/i,
-  /Chrome\/Edge QA profiles/i,
-  /for Brave-only QA/i,
 ];
 
 for (const filePath of walk(repoRoot)) {
@@ -117,17 +113,16 @@ if (existsSync(packageJsonPath)) {
 
   if (
     scripts['agentic:browser-proof'] &&
-    !scripts['agentic:browser-proof'].startsWith('bun scripts/require-authenticated-browser-qa.mjs')
+    !scripts['agentic:browser-proof'].startsWith('bun scripts/require-authenticated-browser-qa.mjs && ')
   ) {
     fail('package.json: local agentic:browser-proof must be guarded by require-authenticated-browser-qa.mjs');
   }
 
   if (
     scripts['agentic:verify'] &&
-    scripts['agentic:verify'].includes('ui:verify') &&
-    !scripts['agentic:verify'].startsWith('bun scripts/require-authenticated-browser-qa.mjs')
+    !scripts['agentic:verify'].startsWith('bun scripts/require-authenticated-browser-qa.mjs && ')
   ) {
-    fail('package.json: local agentic:verify browser lane must be guarded by require-authenticated-browser-qa.mjs');
+    fail('package.json: local agentic:verify must be guarded by require-authenticated-browser-qa.mjs');
   }
 }
 

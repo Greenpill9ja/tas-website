@@ -1,6 +1,6 @@
 "use client";
 
-import { Twitter, Github, Linkedin } from "lucide-react";
+import { Twitter, Linkedin, Youtube } from "lucide-react";
 import { useActionState } from "react";
 import { submitContactForm } from "@/app/actions/contact";
 import Image from "next/image";
@@ -247,15 +247,22 @@ export default function Footer() {
                 </section>
 
                 <div className="mt-8 flex w-full flex-col items-center justify-between gap-4 border-t border-dark/10 pt-8 md:flex-row">
-                    <p className="font-body text-sm font-medium text-dark/50">
-                        Tech and Sun © 2026.
-                    </p>
+                    <div className="flex items-center gap-3">
+                        <Image src="/Tas Logo-green.png" alt="TAS Logo" width={40} height={40} className="h-10 w-10 rounded-full" />
+                        <p className="font-body text-sm font-medium text-dark/50">
+                            Tech and Sun © 2026.
+                        </p>
+                    </div>
                     <div className="flex items-center gap-4">
-                        <a href="https://x.com/techandsunhub" target="_blank" rel="noopener noreferrer" className="text-dark/40 transition-colors hover:text-primary">
+                        <a href="https://x.com/techandsunhubs" target="_blank" rel="noopener noreferrer" className="text-dark/40 transition-colors hover:text-primary" aria-label="Twitter">
                             <Twitter className="h-7 w-7" />
                         </a>
-                        <a href="https://github.com/Greenpill9ja" target="_blank" rel="noopener noreferrer" className="text-dark/40 transition-colors hover:text-primary">
-                            <Github className="h-7 w-7" />
+
+                        <a href="https://www.linkedin.com/company/tech-and-sun/" target="_blank" rel="noopener noreferrer" className="text-dark/40 transition-colors hover:text-primary" aria-label="LinkedIn">
+                            <Linkedin className="h-7 w-7" />
+                        </a>
+                        <a href="https://www.youtube.com/@TechandSunHubs" target="_blank" rel="noopener noreferrer" className="text-dark/40 transition-colors hover:text-primary" aria-label="YouTube">
+                            <Youtube className="h-7 w-7" />
                         </a>
                     </div>
                 </div>

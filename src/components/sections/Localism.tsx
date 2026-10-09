@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { AnimatedLines } from "../ui/AnimatedLines";
-import { Calendar, X, ExternalLink } from "lucide-react";
+import { X } from "lucide-react";
 import Image from "next/image";
 
 interface Hub {
@@ -19,8 +19,6 @@ interface Hub {
     textColor: string;
     summary: string;
     description: string;
-    capacity: string;
-    lumaLink: string;
 }
 
 export default function Localism() {
@@ -41,12 +39,10 @@ export default function Localism() {
             textColor: "text-primary",
             summary: "Our live pilot hub in Awka, near UNIZIK, gives students and builders a dependable base for learning, collaboration, and early-stage community projects.",
             description: "TAS Hub Awka is our live pilot location near Nnamdi Azikiwe University in Awka. It brings together dependable solar power, internet access, and a shared space where students and builders can learn together, test ideas, and work on projects with local relevance.",
-            capacity: "50+ Daily Users",
-            lumaLink: "https://luma.com/Greenpillnaija"
         },
         {
             id: "enugu",
-            name: "TAS Hub Enugu",
+            name: "Planned TAS Hub Enugu",
             location: "Enugu, Nigeria",
             image: "/enuguhub.png",
             status: "Coming Soon",
@@ -55,10 +51,8 @@ export default function Localism() {
             border: "border-primary/20",
             overlay: "bg-primary/20",
             textColor: "text-accent",
-            summary: "Our next hub in Enugu will carry the TAS model beyond Awka and create another university-centered base for learning, collaboration, and local infrastructure work.",
-            description: "TAS Hub Enugu is the next step after Awka. It is being shaped as a new university-centered hub with dependable infrastructure, shared learning resources, and space for builders to collaborate on projects that can strengthen the surrounding community.",
-            capacity: "150+ Planned Capacity",
-            lumaLink: "https://luma.com/Greenpillnaija"
+            summary: "Enugu is a planned expansion location. Site, timing, and capacity remain subject to confirmation before the hub is presented as active.",
+            description: "TAS is exploring Enugu as a future university-centered hub. The location is not yet operating, and launch timing, site details, and capacity will be published only after they are confirmed."
         }
     ];
 
@@ -84,12 +78,13 @@ export default function Localism() {
                 </p>
             </div>
 
-            <div className="container mx-auto flex flex-col md:flex-row items-stretch justify-center gap-8 md:gap-16">
+            <div className="container mx-auto grid max-w-5xl items-stretch gap-8 md:grid-cols-2 md:gap-16">
                 {hubs.map((hub) => (
-                    <motion.div
+                    <motion.button
+                        type="button"
                         key={hub.id}
                         onClick={() => setSelectedHub(hub)}
-                        className={`group relative w-full h-full max-w-md overflow-hidden flex flex-col rounded-3xl border ${hub.border} bg-white shadow-2xl transition-transform hover:-translate-y-2 cursor-pointer`}
+                        className={`group relative flex h-full w-full flex-col overflow-hidden rounded-3xl border ${hub.border} bg-white text-left shadow-2xl cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary`}
                     >
                         <div className="aspect-[4/3] w-full bg-dark/5 relative overflow-hidden shrink-0">
                             <Image src={hub.image} alt={hub.name} fill className="object-cover" />
@@ -117,7 +112,7 @@ export default function Localism() {
                                 {hub.summary}
                             </p>
                         </div>
-                    </motion.div>
+                    </motion.button>
                 ))}
             </div>
 
@@ -144,6 +139,7 @@ export default function Localism() {
                                 <button
                                     onClick={() => setSelectedHub(null)}
                                     className="absolute top-4 right-4 p-2 rounded-full bg-dark/40 text-white hover:bg-dark/60 backdrop-blur-md transition-colors"
+                                    aria-label="Close hub details"
                                 >
                                     <X className="h-5 w-5" />
                                 </button>
@@ -171,21 +167,6 @@ export default function Localism() {
                                     {selectedHub.description}
                                 </p>
 
-                                <div className="flex flex-col md:flex-row items-center gap-4 pt-6 border-t border-dark/10">
-                                    <div className="bg-vibrant text-dark/80 px-4 py-3 rounded-xl text-sm font-bold flex-1 text-center w-full">
-                                        Capacity: {selectedHub.capacity}
-                                    </div>
-                                    <a
-                                        href={selectedHub.lumaLink}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex-1 w-full bg-dark text-white hover:bg-primary transition-colors flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-heading font-bold"
-                                    >
-                                        <Calendar className="w-4 h-4" />
-                                        View Events on Luma
-                                        <ExternalLink className="w-3 h-3 ml-1 opacity-50" />
-                                    </a>
-                                </div>
                             </div>
                         </motion.div>
                     </motion.div>

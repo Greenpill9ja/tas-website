@@ -7,6 +7,10 @@
   --color-vibrant: #E5F1FF;
   --color-dark: #0F172A;
   --color-light-green: #5D9056;
+  --color-tas-sky: #A5D5F5;
+
+  --radius-feature: 2.5rem;
+  --radius-callout: 2.4rem;
   
   --font-heading: var(--font-space-grotesk);
   --font-body: var(--font-inter);
@@ -19,5 +23,33 @@
   
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading tracking-tight;
+  }
+}
+
+@layer components {
+  .hub-activities-carousel {
+    --hub-activities-gap: 1rem;
+
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 100%;
+    align-items: stretch;
+    gap: var(--hub-activities-gap);
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-padding-inline: 0;
+    scroll-snap-type: x mandatory;
+  }
+
+  .hub-activities-carousel > li {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  @media (min-width: 48rem) {
+    .hub-activities-carousel {
+      --hub-activities-gap: 1.5rem;
+      grid-auto-columns: calc((100% - var(--hub-activities-gap)) / 2);
+    }
   }
 }

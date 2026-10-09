@@ -13,14 +13,14 @@ const milestones = [
     {
         id: 2,
         quarter: "Q2 2026",
-        title: "Bring the TAS model to Enugu and secure funding to grow from a couple hubs to many",
+        title: "Launch learning programs at the Awka hub and strengthen the operating model for future locations",
         badge: "border-accent/20 bg-accent/10 text-accent",
         dot: "bg-accent"
     },
     {
         id: 3,
         quarter: "Q3 2026",
-        title: "Break ground on new hubs in Lagos and Abuja, extending dependable infrastructure across Nigeria",
+        title: "Prepare the next hub locations, including Enugu and Abuja, through site, partner, and funding readiness",
         badge: "border-secondary/30 bg-secondary/40 text-dark",
         dot: "bg-secondary"
     },
