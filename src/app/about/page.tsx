@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, House, Linkedin, Sun, Twitter, Wifi, Youtube } from "lucide-react";
-import AboutContactForm from "@/components/about/AboutContactForm";
+import { ArrowUpRight, House, Sun, Wifi } from "lucide-react";
+import Footer from "@/components/sections/Footer";
 import AboutHeroCarousel from "@/components/about/AboutHeroCarousel";
+import SiteHeader from "@/components/SiteHeader";
+import { buttonStyles } from "@/components/ui/button-styles";
 
 export const metadata: Metadata = {
     title: "About Tech & Sun (TAS)",
@@ -47,18 +49,7 @@ export default function AboutPage() {
         <>
             <a href="#about-content" className="fixed left-4 top-4 z-50 -translate-y-24 rounded-full bg-dark px-5 py-3 font-body text-sm font-bold text-white transition-transform focus:translate-y-0">Skip to content</a>
 
-            <header className="absolute inset-x-0 top-0 z-40">
-                <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-6">
-                    <Link href="/" aria-label="Tech and Sun home" className="rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">
-                        <Image src="/Tas Logo-green.png" alt="" width={52} height={52} className="h-12 w-12 rounded-full" priority />
-                    </Link>
-                    <nav aria-label="About page" className="flex items-center gap-8">
-                        <Link className="font-body text-sm font-semibold text-dark/70 hover:text-primary" href="/">Home</Link>
-                        <a className="font-body text-sm font-bold text-dark" href="#about-content" aria-current="page">About</a>
-                    </nav>
-                    <a href="#contact" className="rounded-full bg-secondary px-5 py-3 font-heading text-sm font-bold text-dark shadow-md transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">Partner with TAS</a>
-                </div>
-            </header>
+            <SiteHeader />
 
             <main id="about-content" tabIndex={-1} className="w-full overflow-x-hidden bg-white text-dark outline-none">
                 <section className="bg-gradient-to-b from-tas-sky to-vibrant px-4 pb-20 pt-32 md:pb-24 md:pt-36">
@@ -86,10 +77,10 @@ export default function AboutPage() {
 
                 <section className="bg-vibrant px-4 py-20 md:py-28" aria-labelledby="current-title"><div className="mx-auto grid w-full max-w-6xl gap-12 lg:grid-cols-[1.15fr_1fr] lg:items-center"><div><p className="font-body text-xs font-black uppercase tracking-widest text-primary">Where we are now</p><h2 id="current-title" className="mt-4 max-w-xl font-heading text-4xl font-bold md:text-6xl">What we are doing now</h2><ul className="mt-8 grid gap-3 font-body text-lg leading-relaxed text-dark/70"><li>• Keep the active hub dependable for daily learning and work.</li><li>• Run practical workshops, onboarding and community learning sessions.</li><li>• Document participation, lessons and outcomes to improve future hubs.</li><li>• Prepare the next location with local partners and community stewards.</li></ul></div><div className="grid gap-5 sm:grid-cols-2"><article className="rounded-3xl bg-white p-8 shadow-sm"><p className="font-body text-xs font-black uppercase tracking-widest text-dark">Awka</p><h3 className="mt-5 font-heading text-3xl font-bold text-primary">Active hub</h3><p className="mt-8 font-body leading-relaxed">Power • Internet<br />Workspace • Programs</p></article><article className="rounded-3xl bg-white p-8 shadow-sm"><p className="font-body text-xs font-black uppercase tracking-widest text-dark">Enugu</p><h3 className="mt-5 font-heading text-3xl font-bold text-primary">Coming next</h3><p className="mt-8 font-body leading-relaxed">Site development<br />and partner readiness</p></article></div></div></section>
 
-                <section className="px-4 pb-20 pt-20 md:pb-28"><div className="mx-auto w-full max-w-6xl rounded-callout bg-gradient-to-r from-primary to-light-green p-8 text-white shadow-2xl md:p-12"><p className="font-body text-xs font-black uppercase tracking-widest text-secondary">Connect with Tech &amp; Sun</p><div className="mt-5 grid gap-8 lg:grid-cols-2 lg:items-end"><h2 className="max-w-3xl font-heading text-4xl font-bold leading-tight md:text-6xl">Partner, support or learn more about TAS.</h2><div><p className="font-body text-lg leading-relaxed text-white/75">Bring funding, expertise, equipment or local knowledge—or schedule a focused conversation with the team. You can also send a message using the single contact form below.</p><div className="mt-7 flex flex-col gap-3 sm:flex-row"><a className="rounded-full bg-secondary px-6 py-3 text-center font-heading text-sm font-bold text-dark" href="#contact">Schedule a call</a><Link className="rounded-full bg-white px-6 py-3 text-center font-heading text-sm font-bold text-primary" href="/#activities">Read our documentation</Link></div></div></div></div></section>
+                <section className="px-4 pb-20 pt-20 md:pb-28"><div className="mx-auto w-full max-w-6xl rounded-callout bg-gradient-to-r from-primary to-light-green p-8 text-white shadow-2xl md:p-12"><p className="font-body text-xs font-black uppercase tracking-widest text-secondary">Connect with Tech &amp; Sun</p><div className="mt-5 grid gap-8 lg:grid-cols-2 lg:items-end"><h2 className="max-w-3xl font-heading text-4xl font-bold leading-tight md:text-6xl">Partner, support or learn more about TAS.</h2><div><p className="font-body text-lg leading-relaxed text-white/75">Bring funding, expertise, equipment or local knowledge—or schedule a focused conversation with the team. You can also send a message using the single contact form below.</p><div className="mt-7 flex flex-col gap-3 sm:flex-row"><a className={buttonStyles()} href="#contact">Schedule a call</a><Link className={buttonStyles({ variant: "secondary" })} href="/#activities">Read our documentation</Link></div></div></div></div></section>
             </main>
 
-            <footer id="contact" className="scroll-mt-20 border-t border-dark/10 bg-vibrant px-4 pb-8 pt-20"><div className="mx-auto w-full max-w-2xl"><div className="text-center"><h2 className="font-heading text-4xl font-bold md:text-6xl">Get in touch</h2><p className="mx-auto mt-5 max-w-xl font-body text-lg leading-relaxed text-dark/70">Send one message to ask about the hubs, explore a partnership or support the next phase of growth across Nigeria.</p></div><div className="mt-10"><AboutContactForm /></div></div><div className="mx-auto mt-20 flex w-full max-w-6xl flex-col items-center justify-between gap-4 border-t border-dark/10 pt-8 md:flex-row"><div className="flex items-center gap-3"><Image src="/Tas Logo-green.png" alt="TAS Logo" width={40} height={40} className="h-10 w-10 rounded-full" /><p className="font-body text-sm font-medium text-dark/50">Tech and Sun © 2026.</p></div><div className="flex items-center gap-4"><a href="https://x.com/techandsunhubs" target="_blank" rel="noopener noreferrer" aria-label="Tech and Sun on X" className="text-dark/40 transition-colors hover:text-primary"><Twitter className="h-7 w-7" /></a><a href="https://www.linkedin.com/company/tech-and-sun/" target="_blank" rel="noopener noreferrer" aria-label="Tech and Sun on LinkedIn" className="text-dark/40 transition-colors hover:text-primary"><Linkedin className="h-7 w-7" /></a><a href="https://www.youtube.com/@TechandSunHubs" target="_blank" rel="noopener noreferrer" aria-label="Tech and Sun on YouTube" className="text-dark/40 transition-colors hover:text-primary"><Youtube className="h-7 w-7" /></a></div></div></footer>
+            <Footer />
         </>
     );
 }

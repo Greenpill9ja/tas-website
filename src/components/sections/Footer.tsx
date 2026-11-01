@@ -4,6 +4,7 @@ import { Twitter, Linkedin, Youtube } from "lucide-react";
 import { useActionState } from "react";
 import { submitContactForm } from "@/app/actions/contact";
 import Image from "next/image";
+import { buttonStyles } from "@/components/ui/button-styles";
 
 type TeamMember = {
     slug: string;
@@ -237,7 +238,7 @@ export default function Footer() {
                                 <button
                                     type="submit"
                                     disabled={isPending}
-                                    className="w-full rounded-full bg-secondary px-8 py-4 font-heading text-lg font-bold text-dark shadow-lg transition-opacity disabled:opacity-60"
+                                    className={buttonStyles({ className: "w-full" })}
                                 >
                                     {isPending ? "Sending..." : "Send Message"}
                                 </button>
