@@ -1,10 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Twitter, Youtube } from "lucide-react";
 import { useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
 
 const floatingIconCards = [
     {
@@ -62,33 +60,6 @@ export default function Hero() {
             data-testid="hero-section"
             className="relative min-h-screen w-full overflow-hidden bg-gradient-to-b from-[#A5D5F5] to-[#E5F1FF] scroll-mt-24"
         >
-            {/* Navigation */}
-            <header className="absolute top-0 left-0 right-0 z-50 w-full">
-                <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-6 md:py-10">
-                    <div className="flex items-center gap-2">
-                        <Image
-                            src="/Tas Logo-green.png"
-                            alt="TAS Logo"
-                            width={40}
-                            height={40}
-                            className="h-10 w-10 rounded-full md:h-12 md:w-12 lg:h-14 lg:w-14"
-                        />
-                    </div>
-
-                    <div className="flex items-center gap-6">
-                        <Link href="/about" className="font-heading text-base font-bold text-dark/80 hover:text-primary transition-colors">
-                            About us
-                        </Link>
-                        <a href="https://x.com/techandsunhubs" target="_blank" rel="noopener noreferrer" className="text-dark/60 hover:text-primary transition-colors">
-                            <Twitter className="h-7 w-7" />
-                        </a>
-                        <a href="https://www.youtube.com/@TechandSunHubs" target="_blank" rel="noopener noreferrer" className="text-dark/60 hover:text-primary transition-colors" aria-label="YouTube">
-                            <Youtube className="h-7 w-7" />
-                        </a>
-                    </div>
-                </div>
-            </header>
-
             {/* Sun Illustration */}
             <div id="hero-sun" className="absolute top-10 left-1/2 -translate-x-1/2 z-0">
                 <motion.div
