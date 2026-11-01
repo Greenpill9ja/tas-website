@@ -21,6 +21,14 @@ describe("Impact review 48–53", () => {
         expect(getReportSource({ source: "https://example.org/report", sourceReviewed: false })).toBeNull();
         expect(getReportSource({ source: null, sourceReviewed: true })).toBeNull();
     });
+    test("both navigation layouts hide Home only on home and list Impact before About us", async () => {
+        const source = await Bun.file("src/components/SiteHeader.tsx").text();
+        expect(source).toContain('links.filter(link => link.href !== "/" || pathname !== "/")');
+        expect(source).toContain("visibleLinks.map(link =>");
+        expect(source.indexOf('label: "Impact"')).toBeLessThan(source.indexOf('label: "About us"'));
+        expect(source).toContain("{navigation()}");
+        expect(source).toContain("{navigation(true)}");
+    });
     test("only reviewed HTTPS reports can expose links", () => {
         expect(getReportSource({ source: "https://example.org/report", sourceReviewed: true })).toBe("https://example.org/report");
         for (const source of ["javascript:alert(1)", "http://example.org/report", "not a URL", "https://user:password@example.org/report"]) expect(getReportSource({ source, sourceReviewed: true })).toBeNull();
