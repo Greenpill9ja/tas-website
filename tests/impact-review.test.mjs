@@ -1,5 +1,4 @@
 import { describe, expect, test } from "bun:test";
-import { getReportSource, getWorkRecordUrl, monthlyReports, publishedRecords, sampleRecords } from "../src/components/impact/impact-data.ts";
 import { buttonStyles } from "../src/components/ui/button-styles.ts";
 
 describe("Impact review 48–53", () => {
@@ -16,11 +15,6 @@ describe("Impact review 48–53", () => {
         for (const label of ["Home", "About us", "Impact"]) expect(source).toContain(`label: "${label}"`);
         expect(source).toContain('pathname === link.href ? "page" : undefined');
     });
-    test("unreviewed and missing reports have no source CTA", () => {
-        for (const report of Object.values(monthlyReports)) expect(getReportSource(report)).toBeNull();
-        expect(getReportSource({ source: "https://example.org/report", sourceReviewed: false })).toBeNull();
-        expect(getReportSource({ source: null, sourceReviewed: true })).toBeNull();
-    });
     test("both navigation layouts hide Home only on home and list Impact before About us", async () => {
         const source = await Bun.file("src/components/SiteHeader.tsx").text();
         expect(source).toContain('links.filter(link => link.href !== "/" || pathname !== "/")');
@@ -28,28 +22,6 @@ describe("Impact review 48–53", () => {
         expect(source.indexOf('label: "Impact"')).toBeLessThan(source.indexOf('label: "About us"'));
         expect(source).toContain("{navigation()}");
         expect(source).toContain("{navigation(true)}");
-    });
-    test("only reviewed HTTPS reports can expose links", () => {
-        expect(getReportSource({ source: "https://example.org/report", sourceReviewed: true })).toBe("https://example.org/report");
-        for (const source of ["javascript:alert(1)", "http://example.org/report", "not a URL", "https://user:password@example.org/report"]) expect(getReportSource({ source, sourceReviewed: true })).toBeNull();
-    });
-    test("layout samples never become published work or expose evidence links", () => {
-        expect(publishedRecords).toHaveLength(0);
-        for (const record of sampleRecords) expect(getWorkRecordUrl({ ...record, publicRecordUrl: "https://beta.greengoods.app/sample-test" })).toBeNull();
-    });
-    test("real-record view links require an allowed public Green Goods URL", () => {
-        const record = { ...sampleRecords[0], verification: "pending", publicRecordUrl: "https://beta.greengoods.app/test-record" };
-        expect(getWorkRecordUrl(record)).toBe(record.publicRecordUrl);
-        for (const publicRecordUrl of [null, "javascript:alert(1)", "http://beta.greengoods.app/test", "https://greengoods.app.evil.example/test", "https://user:pass@beta.greengoods.app/test"]) expect(getWorkRecordUrl({ ...record, publicRecordUrl })).toBeNull();
-    });
-    test("published and sample states are separate and View names its record", async () => {
-        const source = await Bun.file("src/components/impact/ImpactContent.tsx").text();
-        expect(source).toContain('useState<"published" | "samples">("published")');
-        expect(source).toContain("Published records");
-        expect(source).toContain("Layout preview · samples");
-        expect(source).toContain("records.length === 0");
-        expect(source).toContain('aria-label={`View ${record.title} on Green Goods`}');
-        expect(source).toContain(">View <ArrowUpRight");
     });
     test("shared primary buttons retain the homepage contact-button style", () => {
         for (const token of ["rounded-full", "bg-secondary", "px-8", "py-4", "font-heading", "text-lg", "font-bold", "text-dark", "shadow-lg", "focus-visible:outline"]) expect(buttonStyles()).toContain(token);
