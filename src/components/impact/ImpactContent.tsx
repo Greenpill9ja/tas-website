@@ -1,55 +1,136 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
-import { ArrowDown, ArrowUpRight, BookOpen, CalendarDays, CheckCircle2, Database, Sun } from "lucide-react";
-import { getReportSource, getWorkRecordUrl, metricDefinitions, monthlyReports, publishedRecords, sampleRecords } from "./impact-data";
+import Image from "next/image";
+import { ArrowUpRight, BookOpen, CheckCircle2, Sun } from "lucide-react";
+import { monthlyReports, testimonials } from "@/lib/impact/gardens";
+import { belongsInDevelopment } from "@/lib/impact/development";
+import type { GardenImpact, Testimonial } from "@/lib/impact/types";
+import { publicHttpsUrl } from "@/lib/impact/validation";
 import { buttonStyles } from "@/components/ui/button-styles";
+import ImpactRecordCard, { formatImpactDate } from "./ImpactRecordCard";
+import ImpactDevelopment from "./ImpactDevelopment";
+import LocallyRooted from "./LocallyRooted";
 
-const metricIcons = ["/Hub-icon.png", "/Solar Panel.png", "/Internet (Starlink) green.png", "/Node.png"];
-const categories = ["All work", "Learning", "Community", "Infrastructure"] as const;
-const focus = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary";
+const selectStyle = "min-h-12 max-w-full rounded-xl border border-primary/25 bg-white px-4 font-body text-base text-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary";
 
-export default function ImpactContent() {
-    const [month, setMonth] = useState<keyof typeof monthlyReports>("2026-09");
-    const [category, setCategory] = useState<(typeof categories)[number]>("All work");
-    const report = monthlyReports[month];
-    const reportUrl = getReportSource(report);
-    const [recordView, setRecordView] = useState<"published" | "samples">("published");
-    const records = (recordView === "published" ? publishedRecords : sampleRecords).filter(record => category === "All work" || record.category === category);
+export default function ImpactContent({ gardens, initialGardenId = "all", preview = false, quotes: suppliedQuotes = testimonials }: {
+    gardens: GardenImpact[];
+    initialGardenId?: string;
+    preview?: boolean;
+    quotes?: Testimonial[];
+}) {
+    const [gardenId, setGardenId] = useState(gardens.some(item => item.garden.id === initialGardenId) ? initialGardenId : "all");
+    const [month, setMonth] = useState("");
+    function changeGarden(id: string) {
+        setGardenId(id);
+        setMonth("");
+        const url = new URL(window.location.href);
+        if (id === "all") url.searchParams.delete("hub");
+        else url.searchParams.set("hub", id);
+        window.history.replaceState(null, "", url);
+    }
+    const selected = gardens.filter(item => gardenId === "all" || item.garden.id === gardenId);
+    const records = [...new Map(selected.flatMap(item => item.records).map(record => [record.id, record])).values()]
+        .sort((a, b) => a.recordedAt.localeCompare(b.recordedAt) || a.id.localeCompare(b.id));
+    const construction = records.filter(record => record.track === "construction");
+    const community = records.filter(record => record.track === "community").reverse();
+    const development = records.filter(belongsInDevelopment);
+    const communityFeed = community.filter(record => !belongsInDevelopment(record));
+    const unclassified = records.filter(record => record.track === null).reverse();
+    const complete = selected.every(item => item.historyComplete);
+    const approved = selected.every(item => item.approvedWorkCount !== null) ? selected.reduce((total, item) => total + item.approvedWorkCount!, 0) : null;
+    const unavailable = selected.filter(item => item.status === "unavailable" || (item.status === "partial" && item.approvedCountSource !== "attestations"));
+    const attestationCounts = selected.filter(item => item.approvedCountSource === "attestations");
+    const stale = selected.filter(item => item.status === "stale");
+    const fetchedAt = selected.map(item => item.fetchedAt).filter((value): value is string => value !== null).sort()[0];
+    const reports = monthlyReports.filter(report => !preview && (gardenId === "all" || report.gardenId === gardenId) && report.reviewedAt && publicHttpsUrl(report.sourceUrl));
+    const report = reports.find(item => `${item.gardenId}:${item.month}` === month) ?? reports[0];
+    const quotes = suppliedQuotes.filter(item => (gardenId === "all" || item.gardenId === gardenId) && (item.kind === "sample" || (item.consentRecordedAt && publicHttpsUrl(item.sourceUrl))));
+    const gardenName = (id: string) => gardens.find(item => item.garden.id === id)?.garden.name ?? id;
+    const scopeName = gardenId === "all" ? "All TAS hubs" : gardenName(gardenId);
+    const operatingStatus = { active: "Open to the community", building: "Taking shape", archived: "Archived" };
+    const metrics = [
+        { icon: "/Hub-icon.png", label: "Active hubs", value: selected.filter(item => item.garden.status === "active").length, note: "Places open to the community" },
+        { icon: "/Node.png", label: preview ? "Example work records" : "Approved work records", value: approved, note: preview ? "Illustrative activity for this design" : "Reviewed by garden stewards" },
+        { icon: "/Solar Panel.png", label: "Development records", value: complete ? construction.length : null, note: "From site preparation to fit-out" },
+        { icon: "/Internet (Starlink) green.png", label: "Learning & community", value: complete ? community.length : null, note: "Records of life at the hub" },
+    ];
 
     return <>
-        <aside className="border-y border-primary/15 bg-secondary/20 px-4 py-3 text-center font-body text-sm text-dark" aria-label="Data connection status">
-            <strong>Staging preview.</strong> Monthly figures are review data, not confirmed reports. Published records and illustrative layout samples are shown separately.
-        </aside>
-        <section id="monthly-report" className="scroll-mt-8 bg-primary/5 px-4 py-20 md:py-28" data-testid="impact-monthly">
+        {preview && <aside className="border-y border-primary/15 bg-secondary/20 px-4 py-5" aria-label="Multi-hub preview notice"><div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4"><p className="max-w-3xl font-body text-sm leading-relaxed"><strong>Multi-hub design preview.</strong> All three hubs, their figures and work records are illustrative. Photographs are from the Awka gallery, not evidence for these example hubs.</p><a href="/impact" className={buttonStyles({ variant: "text" })}>Return to live impact <ArrowUpRight size={18} aria-hidden="true" /></a></div></aside>}
+        <section id="impact-overview" className="scroll-mt-24 bg-primary/5 px-4 py-20 md:py-28" data-testid="impact-overview">
             <div className="mx-auto max-w-6xl">
                 <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
-                    <div><p className="font-body text-xs font-bold uppercase tracking-widest text-primary">01 / Infrastructure in use</p><h2 className="mt-4 font-heading text-4xl font-bold md:text-6xl">A month at the hub.</h2><p className="mt-5 max-w-xl font-body text-lg leading-relaxed text-dark/70">Small details of everyday access. Power to keep going, connection to take part, and a place to learn.</p></div>
-                    <div className="flex flex-wrap gap-4"><label className="grid gap-2 font-body text-xs font-bold uppercase tracking-wide">Hub<select className={`min-h-12 rounded-xl border border-primary/20 bg-white px-4 text-base font-normal normal-case ${focus}`} aria-label="Hub"><option>Awka</option></select></label><label className="grid gap-2 font-body text-xs font-bold uppercase tracking-wide">Reporting month<select value={month} onChange={event => setMonth(event.target.value as keyof typeof monthlyReports)} className={`min-h-12 rounded-xl border border-primary/20 bg-white px-4 text-base font-normal normal-case ${focus}`}><option value="2026-09">September 2026</option><option value="2026-10">October 2026</option></select></label></div>
+                    <div><p className="font-body text-xs font-bold uppercase tracking-widest text-primary">01 / Our progress</p><h2 className="mt-4 font-heading text-4xl font-bold md:text-6xl">Built together.<br />Recorded openly.</h2><p className="mt-5 max-w-xl font-body text-lg leading-relaxed text-dark/70">Follow the spaces we build and the life within them. Choose a hub to explore its part in the story.</p></div>
+                    <label className="grid gap-2 font-body text-xs font-bold uppercase tracking-wide">View impact for<select aria-label="View impact for" value={gardenId} onChange={event => changeGarden(event.target.value)} className={`${selectStyle} font-normal normal-case`}><option value="all">All TAS hubs</option>{gardens.map(item => <option key={item.garden.id} value={item.garden.id}>{item.garden.name}</option>)}</select></label>
                 </div>
-                <div className="mt-10" aria-live="polite" aria-atomic="true"><p className="font-body text-sm text-dark/70">Awka · {report.label} · {report.status}</p><dl className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{metricDefinitions.map((metric, index) => { const icon = metricIcons[index]; return <div key={metric.label} className="relative flex h-full flex-col rounded-3xl border border-primary/15 bg-white p-6 shadow-sm"><div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-vibrant/60"><Image src={icon} alt="" width={64} height={64} className="h-16 w-16 object-contain" /></div><dt className="mt-6 font-heading text-lg font-bold">{metric.label}</dt><dd className="mt-3 break-words font-heading text-4xl font-bold tracking-tight text-primary xl:text-5xl">{report.values[index] ?? "—"}<span className="mt-2 block font-body text-sm font-medium text-dark/60">{metric.unit}</span></dd><p className="mt-5 font-body text-sm leading-relaxed text-dark/65">{metric.description}</p><p className="mt-auto pt-5 font-body text-xs font-semibold text-dark/55">Review figures · not a live reading</p></div>; })}</dl><div className="mt-6 flex flex-wrap items-center justify-between gap-4"><p className="font-body text-sm text-dark/65">{report.note}</p>{reportUrl && <a href={reportUrl} target="_blank" rel="noopener noreferrer" className={buttonStyles({ variant: "text" })}>Read the source report <ArrowUpRight size={18} aria-hidden="true" /></a>}</div></div>
+                {gardens.length > 1 && <div className="mt-10" data-testid="impact-hubs">
+                    <div className="flex flex-wrap items-center justify-between gap-3"><h3 className="font-heading text-xl font-bold">A network of local possibilities</h3><button type="button" onClick={() => changeGarden("all")} aria-pressed={gardenId === "all"} className={buttonStyles({ variant: "text" })}>View all hubs</button></div>
+                    <ul className="mt-4 grid gap-4 md:grid-cols-3">{gardens.map(item => <li key={item.garden.id} className={`flex flex-col rounded-3xl border bg-white p-6 shadow-sm ${gardenId === item.garden.id ? "border-primary ring-2 ring-primary/20" : "border-primary/15"}`}>
+                        <p className="font-body text-xs font-bold uppercase tracking-wide text-primary">{operatingStatus[item.garden.status]}</p>
+                        <h4 className="mt-3 font-heading text-2xl font-bold">{item.garden.name}</h4>
+                        <p className="mt-2 font-body text-sm text-dark/65">{item.garden.location}</p>
+                        <p className="mt-5 font-body text-sm text-dark/75">{item.approvedWorkCount === null ? "Work total unavailable" : `${item.approvedWorkCount} ${preview ? "example" : "approved"} work records`}{!item.historyComplete && " · partial history"}{item.status === "stale" && " · refresh pending"}</p>
+                        <button type="button" aria-pressed={gardenId === item.garden.id} onClick={() => changeGarden(item.garden.id)} className={buttonStyles({ variant: "text", className: "mt-auto self-start pt-5" })}>{gardenId === item.garden.id ? "Viewing this hub" : "View this hub"}<ArrowUpRight size={16} aria-hidden="true" /><span className="sr-only">{item.garden.name}</span></button>
+                    </li>)}</ul>
+                </div>}
+                <p role="status" className="mt-10 font-body text-sm text-dark/70" data-testid="impact-scope">{scopeName} · {selected.length} {selected.length === 1 ? "hub" : "hubs"} · {records.length} {preview ? "example" : "available"} work records{preview ? " · illustrative data" : " · all reporting dates"}</p>
+                <div>
+                    <dl className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{metrics.map(metric => <div key={metric.label} className="flex h-full flex-col rounded-3xl border border-primary/15 bg-white p-6 shadow-sm"><div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-vibrant/60"><Image src={metric.icon} alt="" width={64} height={64} unoptimized className="h-16 w-16 object-contain" /></div><dt className="mt-6 font-heading text-lg font-bold">{metric.label}</dt><dd className="mt-3 font-heading text-4xl font-bold text-primary xl:text-5xl">{metric.value ?? "—"}</dd><p className="mt-5 font-body text-sm leading-relaxed text-dark/65">{metric.note}</p></div>)}</dl>
+                    <p className="mt-6 font-body text-sm text-dark/65">{preview ? "Example totals demonstrate filtering. They are not reported TAS outcomes." : <>Work records across all reporting dates.{fetchedAt && <> Updated {formatImpactDate(fetchedAt)}.</>}</>}</p>
+                    {attestationCounts.length > 0 && <p role="status" className="mt-4 font-body text-sm text-dark/75">Work counts for {attestationCounts.map(item => item.garden.name).join(", ")} come from the complete public attestation history while the Green Goods summary is unavailable.</p>}
+                    {stale.length > 0 && <p role="status" className="mt-4 font-body text-sm text-dark/75">{stale.map(item => item.garden.name).join(", ")}: showing the last successfully fetched records while we refresh the sources.</p>}
+                    {unavailable.length > 0 && <p role="status" className="mt-4 rounded-xl border border-primary/20 bg-white p-4 font-body text-sm text-dark/80">{unavailable.map(item => item.garden.name).join(", ")}: some evidence is temporarily unavailable. Available records are shown; incomplete totals appear as —. <a href="/impact" className="inline-flex min-h-12 items-center font-bold text-primary underline">Refresh impact</a></p>}
+                </div>
+                {report && <section id="monthly-report" className="mt-10 border-t border-primary/15 pt-8" data-testid="impact-monthly">
+                    <div className="flex flex-wrap items-end justify-between gap-4"><h3 className="font-heading text-2xl font-bold">A month at the hub</h3><label className="flex flex-col gap-2 font-body text-sm">Reporting month<select className={selectStyle} value={`${report.gardenId}:${report.month}`} onChange={event => setMonth(event.target.value)}>{reports.map(item => <option key={`${item.gardenId}:${item.month}`} value={`${item.gardenId}:${item.month}`}>{gardenName(item.gardenId)} · {item.month}</option>)}</select></label></div>
+                    <dl className="mt-5 grid grid-cols-2 gap-4 lg:grid-cols-4">{report.metrics.map(metric => <div key={metric.label}><dt className="font-body text-sm">{metric.label}</dt><dd className="mt-2 font-heading text-3xl font-bold text-primary">{metric.value} <span className="text-base">{metric.unit}</span></dd><p className="mt-2 font-body text-xs text-dark/65">{metric.definition}</p></div>)}</dl>
+                    <a href={publicHttpsUrl(report.sourceUrl)!} className="mt-4 inline-flex min-h-12 items-center font-body text-sm text-primary underline">Read the source report</a>
+                    {report.pdfUrl && publicHttpsUrl(report.pdfUrl) && <a href={publicHttpsUrl(report.pdfUrl)!} className="ml-6 inline-flex min-h-12 items-center font-body text-sm text-primary underline">View report PDF</a>}
+                </section>}
             </div>
         </section>
-
-        <section id="community-work" className="px-4 py-20 md:py-28" data-testid="impact-work">
-            <div className="mx-auto max-w-6xl"><div className="flex flex-col justify-between gap-5 md:flex-row md:items-end"><div><p className="font-body text-xs font-bold uppercase tracking-widest text-primary">02 / Community in action</p><h2 className="mt-4 max-w-3xl font-heading text-4xl font-bold md:text-6xl">Behind every number,<br />people doing the work.</h2></div><p className="max-w-sm font-body leading-relaxed text-dark/65">Green Goods will connect each activity to its context, contributions and public evidence. Only reviewed public records will appear as published work. The separate layout preview demonstrates how populated cards will look.</p></div>
-                <div className="mt-8 flex flex-wrap gap-3" aria-label="Choose work data view">{([{ value: "published", label: "Published records" }, { value: "samples", label: "Layout preview · samples" }] as const).map(view => <button key={view.value} type="button" aria-pressed={recordView === view.value} onClick={() => setRecordView(view.value)} className={buttonStyles({ variant: recordView === view.value ? "primary" : "secondary" })}>{view.label}</button>)}</div>
-                <div className="mt-6 flex flex-wrap gap-2" aria-label="Filter work by category">{categories.map(item => <button key={item} type="button" aria-pressed={category === item} onClick={() => setCategory(item)} className={`min-h-12 rounded-full border px-5 py-3 font-body text-sm font-semibold ${focus} ${category === item ? "border-primary bg-primary text-white" : "border-dark/15 bg-white text-dark hover:border-primary"}`}>{item}</button>)}</div>
-                <p className="mt-4 font-body text-sm text-dark/60" role="status">{records.length} {recordView === "samples" ? "illustrative layout" : "published"} {records.length === 1 ? "record" : "records"}{recordView === "samples" ? " · not live data" : ""}</p>
-                {records.length === 0 && <div className="mt-6 rounded-3xl border border-primary/15 bg-vibrant p-8"><h3 className="font-heading text-2xl font-bold">{publishedRecords.length === 0 ? "Public work records are not connected yet." : "No published work in this category."}</h3><p className="mt-4 max-w-xl font-body leading-relaxed text-dark/70">A reviewed TAS data response and accessible evidence links are still needed. No sample is counted as published work.</p><button type="button" onClick={() => setRecordView("samples")} className={buttonStyles({ variant: "secondary", className: "mt-6" })}>Preview the card layout</button></div>}
-                <ul className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">{records.map(record => <li key={record.id}><article className="h-full overflow-hidden rounded-3xl border border-dark/10 bg-white shadow-sm"><div className="relative aspect-video"><Image src={record.image} alt={record.verification === "sample" ? `TAS gallery: ${record.category.toLowerCase()} context, not evidence of a sample record` : record.title} fill sizes="(min-width: 1024px) 360px, (min-width: 768px) 50vw, 96vw" className="object-cover" /><span className="absolute left-4 top-4 rounded-full bg-secondary px-3 py-2 font-body text-xs font-bold text-dark">{record.verification === "sample" ? "Sample · not a live record" : record.verification === "verified" ? "Source-verified" : "Verification pending"}</span></div><div className="p-6"><p className="font-body text-xs font-semibold uppercase tracking-widest text-primary">{record.hub} · {record.category}</p><h3 className="mt-3 font-heading text-2xl font-bold">{record.title}</h3><p className="mt-4 font-body leading-relaxed text-dark/70">{record.summary}</p>{getWorkRecordUrl(record) && <a href={getWorkRecordUrl(record)!} target="_blank" rel="noopener noreferrer" aria-label={`View ${record.title} on Green Goods`} className={buttonStyles({ variant: "text", className: "mt-4" })}>View <ArrowUpRight size={18} aria-hidden="true" /></a>}<details className="mt-6 border-t border-dark/10 pt-4"><summary className={`min-h-12 cursor-pointer py-3 font-heading font-bold text-primary ${focus}`}>Explore the evidence fields</summary><dl className="mt-3 space-y-3 font-body text-sm"><div><dt className="font-bold">Completion date</dt><dd>{record.completedAt ?? "Awaiting source record"}</dd></div><div><dt className="font-bold">Contributor</dt><dd>{record.contributor ?? "Shown only with publication consent"}</dd></div><div><dt className="font-bold">Verification</dt><dd>{record.verification === "sample" ? "Sample only — no verification claimed" : record.verification === "verified" ? "Source-verified" : "Verification pending"}</dd></div><div><dt className="font-bold">Public Green Goods link</dt><dd>{getWorkRecordUrl(record) ? <a href={getWorkRecordUrl(record)!} target="_blank" rel="noopener noreferrer" aria-label={`View evidence for ${record.title}`} className={buttonStyles({ variant: "text" })}>View <ArrowUpRight size={18} aria-hidden="true" /></a> : "No reviewed public link available"}</dd></div></dl><p className="mt-4 font-body text-xs leading-relaxed text-dark/60">{record.sourceNote}</p></details></div></article></li>)}</ul>
-                <div className="mt-8 flex gap-4 rounded-2xl bg-vibrant p-5"><Database className="mt-1 h-5 w-5 shrink-0 text-primary" aria-hidden="true" /><p className="font-body text-sm leading-relaxed text-dark/75">The future connection will supply the work title, date, summary, consented media, location, verification status and public record URL. A hub report and a verified work record remain separate sources.</p></div>
+        <section id="hub-development" className="scroll-mt-24 px-4 py-20 md:py-28" data-testid="impact-construction">
+            <div className="mx-auto max-w-6xl">
+                <p className="font-body text-xs font-bold uppercase tracking-widest text-primary">02 / Hub development · {scopeName}</p>
+                <h2 className="mt-4 max-w-3xl font-heading text-4xl font-bold leading-tight md:text-6xl">From a site to a place<br className="hidden sm:block" /> full of possibility.</h2>
+                <p className="mt-5 max-w-2xl font-body text-lg leading-relaxed text-dark/75">
+                    {preview ? "Explore separate development stories for each example hub." : "Follow each hub from design through opening as evidence becomes available. Open a record for photographs and attestation dates."}
+                </p>
+                <div className="mt-10 space-y-14">
+                    {selected.map(impact => <ImpactDevelopment key={impact.garden.id} impact={impact}
+                        records={development.filter(record => record.gardenId === impact.garden.id)} preview={preview} />)}
+                </div>
             </div>
         </section>
-
-        <section className="bg-vibrant px-4 py-20 md:py-28"><div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2"><div className="relative aspect-square overflow-hidden rounded-feature"><Image src="/album/16-community-launch.jpeg" alt="The TAS community outside its solar-powered hub" fill sizes="(min-width: 1024px) 560px, 96vw" className="object-cover" /></div><div><p className="font-body text-xs font-bold uppercase tracking-widest text-primary">03 / Locally rooted</p><h2 className="mt-4 font-heading text-4xl font-bold leading-tight md:text-5xl">Infrastructure matters.<br />The people make it useful.</h2><p className="mt-6 font-body text-lg leading-relaxed text-dark/70">A small local team keeps Awka open, supports participants and brings builders and creatives together. Access supports participation in hub learning programmes and community activities.</p><p className="mt-5 font-body leading-relaxed text-dark/70">The aim is more than a place to plug in. It is a place to learn with others, contribute something useful and build relationships that open possibilities.</p><a href="/about" className={buttonStyles({ className: "mt-8" })}>Meet Tech &amp; Sun <ArrowUpRight size={18} aria-hidden="true" /></a></div></div></section>
-
-        <section className="px-4 py-20 md:py-28"><div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-2"><div><p className="font-body text-xs font-bold uppercase tracking-widest text-primary">04 / The monthly record</p><h2 className="mt-4 font-heading text-4xl font-bold md:text-5xl">Progress, with context.</h2><p className="mt-5 font-body text-lg leading-relaxed text-dark/70">Return to the source, choose a reporting month and understand what was counted. We do not invent a trend where comparable data is missing.</p></div><ul className="space-y-4">{Object.entries(monthlyReports).map(([key, item]) => <li key={key} className="rounded-2xl border border-dark/10 p-6"><div className="flex items-center gap-3"><CalendarDays className="h-5 w-5 text-primary" aria-hidden="true" /><h3 className="font-heading text-xl font-bold">{item.label}</h3></div><p className="mt-3 font-body text-sm text-dark/65">{item.status}</p><button type="button" onClick={() => { setMonth(key as keyof typeof monthlyReports); document.getElementById("monthly-report")?.scrollIntoView(); }} className={buttonStyles({ variant: "text", className: "mt-4" })}>View this month <ArrowUpRight size={18} aria-hidden="true" /></button></li>)}</ul></div></section>
-
-        <section className="bg-primary/5 px-4 py-20 md:py-28"><div className="mx-auto max-w-6xl"><p className="font-body text-xs font-bold uppercase tracking-widest text-primary">05 / How we measure</p><h2 className="mt-4 font-heading text-4xl font-bold md:text-5xl">Useful numbers. Honest boundaries.</h2><div className="mt-10 grid gap-6 md:grid-cols-3">{[{ icon: Sun, title: "Hub-reported", body: "Operational readings from the hub team, with a reporting period, definition, unit and source. Energy consumed is not energy generated." }, { icon: BookOpen, title: "Community-recorded", body: "Work documented with its context and evidence. A photo upload or a transaction alone does not establish a verified outcome." }, { icon: CheckCircle2, title: "Source-verified", body: "A verification label appears only when the record supplies the agreed status and public evidence. No sample card is presented as verified." }].map(item => <article key={item.title} className="rounded-3xl bg-white p-7"><item.icon className="h-7 w-7 text-primary" aria-hidden="true" /><h3 className="mt-6 font-heading text-2xl font-bold">{item.title}</h3><p className="mt-4 font-body leading-relaxed text-dark/70">{item.body}</p></article>)}</div><p className="mt-8 max-w-3xl font-body text-sm leading-relaxed text-dark/65">Missing readings stay unavailable, not zero. Estimates are labelled. Unique participant counts are not added across months. We make no carbon-savings claim without an agreed calculation method.</p></div></section>
-
-        <section className="bg-primary px-4 py-20 text-white md:py-28"><div className="mx-auto flex max-w-6xl flex-col justify-between gap-8 lg:flex-row lg:items-end"><div><p className="font-body text-xs font-bold uppercase tracking-widest text-secondary">Build the next possibility</p><h2 className="mt-4 max-w-2xl font-heading text-4xl font-bold md:text-6xl">Help local learning<br />keep moving.</h2><p className="mt-6 max-w-xl font-body text-lg leading-relaxed text-white/80">Educational resources, mentorship, equipment, relationships or funding. Start with a conversation about what the community needs next.</p></div><a href="#contact" className={buttonStyles()}>Talk with the TAS team <ArrowUpRight size={20} aria-hidden="true" /></a></div></section>
-        <a href="#impact-content" className={`mx-auto flex min-h-12 max-w-6xl items-center gap-2 px-4 py-6 font-body text-sm text-primary ${focus}`}>Back to top <ArrowDown className="h-4 w-4 rotate-180" aria-hidden="true" /></a>
+        <section id="community-work" className="scroll-mt-24 px-4 py-20 md:py-28" data-testid="impact-community">
+            <div className="mx-auto max-w-6xl"><p className="font-body text-xs font-bold uppercase tracking-widest text-primary">03 / Community in action · {scopeName}</p><h2 className="mt-4 max-w-3xl font-heading text-4xl font-bold leading-tight md:text-6xl">Behind every number,<br />people doing the work.</h2><p className="mt-5 max-w-2xl font-body text-lg leading-relaxed text-dark/75">{preview ? "A shared feed brings activity from different hubs together. Choose one hub above to follow its community." : "Workshops, everyday access and the care that keeps a shared space useful. Explore the activities our community has documented."}</p>
+                {communityFeed.length !== community.length && <a href="#hub-development" className={buttonStyles({ variant: "text", className: "mt-3 px-0 underline underline-offset-4" })}>See opening records in the hub timelines</a>}
+                {communityFeed.length > 0 && <ul className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">{communityFeed.map(record => <li key={record.id}><ImpactRecordCard record={record} gardenName={gardenName(record.gardenId)} preview={preview} /></li>)}</ul>}
+                {community.length === 0 && <p className="mt-8 font-body text-dark/70">{complete ? (preview ? "No example learning or community records for this selection yet." : "No approved learning or community records for this selection yet.") : "Community records are temporarily unavailable."}</p>}
+                {unclassified.length > 0 && <div className="mt-12"><h3 className="font-heading text-2xl font-bold">More recorded work</h3><ul className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">{unclassified.map(record => <li key={record.id}><ImpactRecordCard record={record} gardenName={gardenName(record.gardenId)} preview={preview} /></li>)}</ul></div>}
+            </div>
+        </section>
+        <LocallyRooted />
+        {quotes.length > 0 && <section id="community-voices" className="px-4 py-20 md:py-28" data-testid="impact-testimonials">
+            <div className="mx-auto max-w-6xl">
+                <p className="font-body text-xs font-bold uppercase tracking-widest text-primary">05 / Community voices · {scopeName}</p>
+                <h2 className="mt-4 font-heading text-4xl font-bold md:text-5xl">What access makes possible</h2>
+                <div className="mt-8 grid gap-6 md:grid-cols-3">
+                    {quotes.map(quote => <figure key={`${quote.gardenId}:${quote.quote}`} className="flex flex-col rounded-3xl bg-primary/5 p-6">
+                        {quote.kind === "sample" && <p className="mb-4 font-body text-xs font-bold uppercase tracking-wide text-primary">Illustrative quote · awaiting member testimonial</p>}
+                        <blockquote className="font-body text-lg leading-relaxed">“{quote.quote}”</blockquote>
+                        <figcaption className="mt-auto pt-5 font-body text-sm">{quote.kind === "approved" ? <a href={publicHttpsUrl(quote.sourceUrl)!} className="text-primary underline">{quote.attribution}</a> : quote.attribution} · {gardenName(quote.gardenId)}</figcaption>
+                    </figure>)}
+                </div>
+            </div>
+        </section>}
+        <section id="how-we-measure" className="bg-primary/5 px-4 py-20 md:py-28"><div className="mx-auto max-w-6xl"><p className="font-body text-xs font-bold uppercase tracking-widest text-primary">06 / How we measure</p><h2 className="mt-4 font-heading text-4xl font-bold md:text-5xl">A record you can follow.</h2>{preview && <p className="mt-5 max-w-2xl font-body text-dark/70">This is how the live page uses evidence. The example cards above carry no approval or verification claim.</p>}<div className="mt-10 grid gap-8 md:grid-cols-3">{[
+            { icon: BookOpen, title: "Community recorded", body: "Gardeners document work with notes and photographs. Every card links back to its original record." },
+            { icon: CheckCircle2, title: "Steward reviewed", body: "Published work has a positive, unrevoked steward approval in Green Goods. Approval records a community review; it is not an independent measurement of every outcome." },
+            { icon: Sun, title: "Measured with context", body: "Work counts describe documented activity. Energy use, attendance and learning hours need their own reporting period, method and source." },
+        ].map(item => <article key={item.title}><item.icon className="h-8 w-8 text-primary" aria-hidden="true" /><h3 className="mt-5 font-heading text-2xl font-bold">{item.title}</h3><p className="mt-4 font-body leading-relaxed text-dark/75">{item.body}</p></article>)}</div></div></section>
+        <section className="bg-primary px-4 py-20 text-white md:py-28"><div className="mx-auto flex max-w-6xl flex-col justify-between gap-8 lg:flex-row lg:items-end"><div><p className="font-body text-xs font-bold uppercase tracking-widest text-secondary">Build the next possibility</p><h2 className="mt-4 max-w-2xl font-heading text-4xl font-bold md:text-5xl">Help local learning<br />keep moving.</h2><p className="mt-6 max-w-xl font-body text-lg leading-relaxed text-white/80">Educational resources, mentorship, equipment, relationships or funding. Start with a conversation about what the community needs next.</p></div><a href="#contact" className={buttonStyles()}>Talk with the TAS team <ArrowUpRight size={20} aria-hidden="true" /></a></div></section>
     </>;
 }
