@@ -5,13 +5,20 @@ for (const route of ["/", "/about", "/impact"]) {
     test(`shared navigation and mobile drawer on ${route}`, async ({ page }) => {
         await page.setViewportSize({ width: 393, height: 852 });
         await page.goto(route);
+        const expectedLinks = route === "/" ? ["Impact", "About us"] : ["Home", "Impact", "About us"];
         const trigger = page.getByRole("button", { name: "Open navigation menu" });
         await trigger.click();
         const dialog = page.getByRole("dialog", { name: "Explore Tech & Sun" });
         await expect(dialog).toBeVisible();
         await expect(trigger).toHaveAttribute("aria-expanded", "true");
-        await expect(dialog.getByRole("link", { name: "Home", exact: true })).toBeVisible();
-        await expect(dialog.locator('[aria-current="page"]')).toHaveAttribute("href", route);
+        const mobileNav = dialog.getByRole("navigation", { name: "Mobile primary", exact: true });
+        await expect(mobileNav.getByRole("link")).toHaveText(expectedLinks);
+        if (route === "/") {
+            await expect(mobileNav.getByRole("link", { name: "Home", exact: true })).toHaveCount(0);
+            await expect(mobileNav.locator('[aria-current="page"]')).toHaveCount(0);
+        } else {
+            await expect(mobileNav.locator('[aria-current="page"]')).toHaveAttribute("href", route);
+        }
         await page.keyboard.press("Escape");
         await expect(dialog).not.toBeVisible();
         await expect(trigger).toBeFocused();
@@ -19,6 +26,12 @@ for (const route of ["/", "/about", "/impact"]) {
         await dialog.getByRole("link", { name: "About us", exact: true }).click();
         await expect(page).toHaveURL(/\/about$/);
         await expect(dialog).not.toBeVisible();
+        await page.setViewportSize({ width: 1440, height: 900 });
+        await page.goto(route);
+        const desktopNav = page.getByRole("navigation", { name: "Primary", exact: true });
+        await expect(desktopNav).toBeVisible();
+        await expect(desktopNav.getByRole("link")).toHaveText(expectedLinks);
+        if (route === "/") await expect(desktopNav.getByRole("link", { name: "Home", exact: true })).toHaveCount(0);
     });
 }
 

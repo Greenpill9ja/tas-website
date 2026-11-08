@@ -15,6 +15,14 @@ describe("Impact review 48–53", () => {
         for (const label of ["Home", "About us", "Impact"]) expect(source).toContain(`label: "${label}"`);
         expect(source).toContain('pathname === link.href ? "page" : undefined');
     });
+    test("both navigation layouts hide Home only on home and list Impact before About us", async () => {
+        const source = await Bun.file("src/components/SiteHeader.tsx").text();
+        expect(source).toContain('links.filter(link => link.href !== "/" || pathname !== "/")');
+        expect(source).toContain("visibleLinks.map(link =>");
+        expect(source.indexOf('label: "Impact"')).toBeLessThan(source.indexOf('label: "About us"'));
+        expect(source).toContain("{navigation()}");
+        expect(source).toContain("{navigation(true)}");
+    });
     test("shared primary buttons retain the homepage contact-button style", () => {
         for (const token of ["rounded-full", "bg-secondary", "px-8", "py-4", "font-heading", "text-lg", "font-bold", "text-dark", "shadow-lg", "focus-visible:outline"]) expect(buttonStyles()).toContain(token);
         expect(buttonStyles({ variant: "secondary" })).not.toContain("bg-secondary");

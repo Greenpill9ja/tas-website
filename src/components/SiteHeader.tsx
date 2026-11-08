@@ -9,12 +9,13 @@ import { buttonStyles } from "@/components/ui/button-styles";
 
 const links = [
     { href: "/", label: "Home" },
-    { href: "/about", label: "About us" },
     { href: "/impact", label: "Impact" },
+    { href: "/about", label: "About us" },
 ];
 
 export default function SiteHeader() {
     const pathname = usePathname();
+    const visibleLinks = links.filter(link => link.href !== "/" || pathname !== "/");
     const drawer = useRef<HTMLDialogElement>(null);
     const [isOpen, setIsOpen] = useState(false);
 
@@ -35,7 +36,7 @@ export default function SiteHeader() {
     }, [isOpen]);
 
     const navigation = (mobile = false) => <nav aria-label={mobile ? "Mobile primary" : "Primary"} className={mobile ? "grid gap-2" : "flex items-center gap-6"}>
-        {links.map(link => <Link key={link.href} href={link.href} onClick={closeDrawer}
+        {visibleLinks.map(link => <Link key={link.href} href={link.href} onClick={closeDrawer}
             aria-current={pathname === link.href ? "page" : undefined}
             className={`inline-flex min-h-12 items-center border-b-2 py-3 font-heading text-base font-bold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary ${mobile ? "px-4" : "px-1"} ${pathname === link.href ? "border-primary text-primary" : "border-transparent text-dark/80 hover:text-primary"}`}>
             {link.label}
