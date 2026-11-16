@@ -81,8 +81,8 @@ export default function AboutHeroCarousel() {
     const currentMedia = photos[activeIndex];
 
     return (
-        <div className="w-full" aria-roledescription="carousel" aria-label="TAS Hub journey, construction, and launch story">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-feature bg-dark/95 shadow-xl">
+        <div className="min-w-0 w-full max-w-full" aria-roledescription="carousel" aria-label="TAS Hub journey, construction, and launch story">
+            <div className="relative aspect-[4/3] w-full max-w-full overflow-hidden rounded-feature bg-dark/95 shadow-xl">
                 {currentMedia.isVideo ? (
                     <video
                         key={currentMedia.src}
@@ -125,7 +125,7 @@ export default function AboutHeroCarousel() {
                     {String(activeIndex + 1).padStart(2, "0")} / {String(photos.length).padStart(2, "0")}
                 </span>
 
-                <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between gap-3">
+                <div className="absolute bottom-4 left-4 right-4 flex min-w-0 items-center justify-between gap-3">
                     <div className="flex items-center gap-2">
                         <button
                             type="button"
@@ -144,7 +144,7 @@ export default function AboutHeroCarousel() {
                             <ChevronRight className="h-5 w-5" aria-hidden="true" />
                         </button>
                     </div>
-                    <span className="truncate rounded-full bg-dark/85 px-4 py-2 font-body text-xs font-semibold text-white backdrop-blur-md">
+                    <span className="min-w-0 truncate rounded-full bg-dark/85 px-4 py-2 font-body text-xs font-semibold text-white backdrop-blur-md">
                         {currentMedia.label}
                     </span>
                 </div>
@@ -152,7 +152,7 @@ export default function AboutHeroCarousel() {
 
             {/* Single horizontal straight line thumbnail strip bounded within main frame width with soft edge shadows */}
             <div className="relative mt-4 w-full overflow-hidden before:pointer-events-none before:absolute before:bottom-0 before:left-0 before:top-0 before:z-10 before:w-8 before:bg-gradient-to-r before:from-tas-sky before:to-transparent after:pointer-events-none after:absolute after:bottom-0 after:right-0 after:top-0 after:z-10 after:w-10 after:bg-gradient-to-l after:from-tas-sky after:to-transparent">
-                <div className="flex w-full items-center gap-2 overflow-x-auto px-1 py-1.5 scrollbar-none snap-x focus-visible:outline-none">
+                <div className="flex w-full max-w-full items-center gap-2 overflow-x-auto overscroll-x-contain px-1 py-1.5 scrollbar-none snap-x focus-visible:outline-none">
                     {photos.map((photo, index) => (
                         <button
                             key={photo.src}

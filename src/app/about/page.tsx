@@ -54,10 +54,10 @@ export default function AboutPage() {
             <main id="about-content" tabIndex={-1} className="w-full overflow-x-hidden bg-white text-dark outline-none">
                 <section className="bg-gradient-to-b from-tas-sky to-vibrant px-4 pb-20 pt-32 md:pb-24 md:pt-36">
                     <div className="mx-auto grid w-full max-w-6xl gap-12 lg:grid-cols-[1.05fr_1fr] lg:items-center">
-                        <div>
+                        <div className="min-w-0">
                             <h1 className="max-w-2xl font-heading text-5xl font-black leading-tight sm:text-6xl">About Tech &amp; Sun</h1>
                             <p className="mt-7 max-w-2xl font-body text-lg leading-relaxed text-dark/75 md:text-xl">Tech &amp; Sun is a community infrastructure initiative building dependable, solar-powered hubs across Nigeria. Our hubs give students, creatives, builders and local communities free access to electricity, internet and shared space to learn, work and grow.</p>
-                            <p className="mt-8 inline-flex rounded-2xl border border-dark/10 bg-white/70 px-5 py-3 font-heading text-xs font-black uppercase tracking-widest text-dark">Community-led infrastructure&nbsp; • &nbsp;Access is free</p>
+                            <p className="mt-8 inline-flex max-w-full flex-wrap justify-center rounded-2xl border border-dark/10 bg-white/70 px-5 py-3 text-center font-heading text-xs font-black uppercase tracking-widest text-dark">Community-led infrastructure · Access is free</p>
                         </div>
                         <AboutHeroCarousel />
                     </div>

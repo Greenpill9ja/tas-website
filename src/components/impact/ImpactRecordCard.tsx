@@ -40,9 +40,14 @@ export default function ImpactRecordCard({ record, gardenName, step, inDevelopme
 
     useEffect(() => {
         if (!isOpen) return;
-        const previousOverflow = document.body.style.overflow;
+        const previousBodyOverflow = document.body.style.overflow;
+        const previousRootOverflow = document.documentElement.style.overflow;
         document.body.style.overflow = "hidden";
-        return () => { document.body.style.overflow = previousOverflow; };
+        document.documentElement.style.overflow = "hidden";
+        return () => {
+            document.body.style.overflow = previousBodyOverflow;
+            document.documentElement.style.overflow = previousRootOverflow;
+        };
     }, [isOpen]);
 
     return <article className="flex h-full flex-col overflow-hidden rounded-3xl border border-primary/15 bg-white shadow-sm" data-testid="impact-record">
@@ -74,23 +79,23 @@ export default function ImpactRecordCard({ record, gardenName, step, inDevelopme
             </div>
         </div>
         <dialog ref={dialog} id={detailId} aria-labelledby={titleId} data-lenis-prevent
-            className="fixed inset-x-0 top-auto bottom-0 m-0 h-fit max-h-9/10 w-full max-w-none overflow-y-auto overscroll-contain rounded-t-3xl border-0 bg-white p-0 text-dark shadow-2xl backdrop:bg-dark/60 md:inset-0 md:m-auto md:w-11/12 md:max-w-4xl md:rounded-3xl"
+            className="fixed inset-x-0 bottom-0 top-auto m-0 max-h-dvh w-full max-w-full overflow-x-hidden overflow-y-auto overscroll-contain rounded-t-3xl border-0 bg-white p-0 text-dark shadow-2xl backdrop:bg-dark/60 md:inset-0 md:m-auto md:h-fit md:max-h-9/10 md:w-11/12 md:max-w-4xl md:rounded-3xl"
             onClose={() => { setIsOpen(false); trigger.current?.focus({ preventScroll: true }); }}
             onClick={event => {
                 if (event.target !== event.currentTarget) return;
                 const { left, right, top, bottom } = event.currentTarget.getBoundingClientRect();
                 if (event.clientX < left || event.clientX > right || event.clientY < top || event.clientY > bottom) closeDetails();
             }}>
-            <header className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-primary/15 bg-white px-5 py-4 md:px-8">
-                <div>
+            <header className="sticky top-0 z-10 flex min-w-0 items-start justify-between gap-4 border-b border-primary/15 bg-white px-5 py-4 md:px-8">
+                <div className="min-w-0 flex-1">
                     <p className="font-body text-xs font-bold uppercase tracking-wide text-primary">{gardenName} · {preview ? "Illustrative record" : "Steward approved"}</p>
-                    <h3 id={titleId} className="mt-1 font-heading text-2xl font-bold md:text-3xl">{record.title}</h3>
+                    <h3 id={titleId} className="mt-1 break-words font-heading text-2xl font-bold md:text-3xl">{record.title}</h3>
                 </div>
                 <button type="button" aria-label="Close impact details" onClick={closeDetails} className={buttonStyles({ variant: "text", className: "shrink-0" })}>
                     <X size={24} aria-hidden="true" />
                 </button>
             </header>
-            {isOpen && <div className="space-y-5 px-5 pt-5 pb-8 md:px-8">
+            {isOpen && <div className="min-w-0 space-y-5 overflow-x-hidden px-5 pb-8 pt-5 md:px-8">
                 {currentImage && <div>
                     <ImpactRecordGallery {...gallery} expanded />
                     <a href={currentImage} target="_blank" rel="noopener noreferrer" className={buttonStyles({ variant: "text", className: "px-0 underline underline-offset-4" })}>
@@ -107,7 +112,7 @@ export default function ImpactRecordCard({ record, gardenName, step, inDevelopme
                 </dl>}
                 {record.sourceDescription && <section>
                     <h4 className="font-heading text-lg font-bold">Original work note from Green Goods</h4>
-                    <blockquote className="mt-2 whitespace-pre-line border-l-2 border-primary/25 pl-4 font-body leading-relaxed text-dark/80">{record.sourceDescription}</blockquote>
+                    <blockquote className="mt-2 break-words whitespace-pre-line border-l-2 border-primary/25 pl-4 font-body leading-relaxed text-dark/80">{record.sourceDescription}</blockquote>
                 </section>}
                 <section className="border-t border-primary/15 pt-4">
                     <h4 className="font-heading text-lg font-bold">{preview ? "Example record date" : "Attestation dates"}</h4>

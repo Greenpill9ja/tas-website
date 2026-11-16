@@ -28,4 +28,18 @@ describe("Impact review 48–53", () => {
         expect(buttonStyles({ variant: "secondary" })).not.toContain("bg-secondary");
         expect(buttonStyles({ className: "mt-8" })).toContain("mt-8");
     });
+    test("impact details contain mobile overflow and lock both page scroll roots", async () => {
+        const card = await Bun.file("src/components/impact/ImpactRecordCard.tsx").text();
+        const gallery = await Bun.file("src/components/impact/ImpactRecordGallery.tsx").text();
+        for (const token of ["max-h-dvh", "max-w-full", "overflow-x-hidden", "document.documentElement.style.overflow", "break-words"]) expect(card).toContain(token);
+        for (const token of ["w-full", "max-w-full", "overflow-hidden"]) expect(gallery).toContain(token);
+    });
+    test("about media and its compact hero label stay inside the mobile viewport", async () => {
+        const carousel = await Bun.file("src/components/about/AboutHeroCarousel.tsx").text();
+        const page = await Bun.file("src/app/about/page.tsx").text();
+        expect(carousel).toContain('className="min-w-0 w-full max-w-full"');
+        expect(carousel).toContain("overscroll-x-contain");
+        expect(page).toContain("inline-flex max-w-full flex-wrap");
+        expect(page).not.toContain("&nbsp;");
+    });
 });
