@@ -255,7 +255,7 @@ export default function Footer({ showMemorial = true }: { showMemorial?: boolean
         Tech and Sun © 2026.
     </p>
     <p className="mt-1 font-body text-xs leading-relaxed text-dark/45">
-        Technology and Solar Support Foundation · <br />Incorporated Trustee · CAC No. 9929336
+        Technology and Solar Support Foundation · <br />Incorporated Trustee · CAC IT No. 9929336
     </p>
     
 </div>
