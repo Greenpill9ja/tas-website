@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" fill="none" role="img" aria-labelledby="title">
+  <title id="title">Approved work record</title>
+  <defs>
+    <linearGradient id="blue" x1="18" y1="15" x2="96" y2="104" gradientUnits="userSpaceOnUse"><stop stop-color="#E5F1FF"/><stop offset=".46" stop-color="#A5D5F5"/><stop offset="1" stop-color="#2446A8"/></linearGradient>
+    <linearGradient id="green" x1="22" y1="22" x2="94" y2="102" gradientUnits="userSpaceOnUse"><stop stop-color="#A8D5A2"/><stop offset=".5" stop-color="#5D9056"/><stop offset="1" stop-color="#2F7326"/></linearGradient>
+  </defs>
+  <ellipse cx="60" cy="105" rx="29" ry="5" fill="#2446A8" opacity=".10"/>
+  <path d="M34 18h38l14 14v52c0 5-4 9-9 9H34c-5 0-9-4-9-9V27c0-5 4-9 9-9Z" fill="url(#blue)"/>
+  <path d="M72 18v14h14" fill="#E5F1FF"/>
+  <path d="M37 45h30M37 56h25M37 67h18" stroke="#FFF" stroke-width="4" stroke-linecap="round" opacity=".82"/>
+  <circle cx="82" cy="82" r="16" fill="url(#green)"/>
+  <path d="m74 82 6 6 11-14" stroke="#FFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -13,6 +13,7 @@ import ImpactDevelopment from "./ImpactDevelopment";
 import LocallyRooted from "./LocallyRooted";
 
 const selectStyle = "min-h-12 max-w-full rounded-xl border border-primary/25 bg-white px-4 font-body text-base text-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary";
+const RECORD_PAGE_SIZE = 6;
 
 export default function ImpactContent({ gardens, initialGardenId = "all", preview = false, quotes: suppliedQuotes = testimonials }: {
     gardens: GardenImpact[];
@@ -22,9 +23,15 @@ export default function ImpactContent({ gardens, initialGardenId = "all", previe
 }) {
     const [gardenId, setGardenId] = useState(gardens.some(item => item.garden.id === initialGardenId) ? initialGardenId : "all");
     const [month, setMonth] = useState("");
+    const [recordPeriod, setRecordPeriod] = useState("all");
+    const [communityLimit, setCommunityLimit] = useState(RECORD_PAGE_SIZE);
+    const [otherLimit, setOtherLimit] = useState(RECORD_PAGE_SIZE);
     function changeGarden(id: string) {
         setGardenId(id);
         setMonth("");
+        setRecordPeriod("all");
+        setCommunityLimit(RECORD_PAGE_SIZE);
+        setOtherLimit(RECORD_PAGE_SIZE);
         const url = new URL(window.location.href);
         if (id === "all") url.searchParams.delete("hub");
         else url.searchParams.set("hub", id);
@@ -38,6 +45,12 @@ export default function ImpactContent({ gardens, initialGardenId = "all", previe
     const development = records.filter(belongsInDevelopment);
     const communityFeed = community.filter(record => !belongsInDevelopment(record));
     const unclassified = records.filter(record => record.track === null).reverse();
+    const recordPeriods = [...new Set([...communityFeed, ...unclassified].map(record => record.recordedAt.slice(0, 7)))].sort().reverse();
+    const inRecordPeriod = (record: (typeof records)[number]) => recordPeriod === "all" || record.recordedAt.startsWith(recordPeriod);
+    const filteredCommunity = communityFeed.filter(inRecordPeriod);
+    const filteredUnclassified = unclassified.filter(inRecordPeriod);
+    const visibleCommunity = filteredCommunity.slice(0, communityLimit);
+    const visibleUnclassified = filteredUnclassified.slice(0, otherLimit);
     const complete = selected.every(item => item.historyComplete);
     const approved = selected.every(item => item.approvedWorkCount !== null) ? selected.reduce((total, item) => total + item.approvedWorkCount!, 0) : null;
     const unavailable = selected.filter(item => item.status === "unavailable" || (item.status === "partial" && item.approvedCountSource !== "attestations"));
@@ -52,9 +65,9 @@ export default function ImpactContent({ gardens, initialGardenId = "all", previe
     const operatingStatus = { active: "Open to the community", building: "Taking shape", archived: "Archived" };
     const metrics = [
         { icon: "/Hub-icon.png", label: "Active hubs", value: selected.filter(item => item.garden.status === "active").length, note: "Places open to the community" },
-        { icon: "/Node.png", label: preview ? "Example work records" : "Approved work records", value: approved, note: preview ? "Illustrative activity for this design" : "Reviewed by garden stewards" },
-        { icon: "/Solar Panel.png", label: "Development records", value: complete ? construction.length : null, note: "From site preparation to fit-out" },
-        { icon: "/Internet (Starlink) green.png", label: "Learning & community", value: complete ? community.length : null, note: "Records of life at the hub" },
+        { icon: "/icons/approved-work.svg", label: preview ? "Example work records" : "Approved work records", value: approved, note: preview ? "Illustrative activity for this design" : "Reviewed by garden stewards" },
+        { icon: "/icons/hub-development.svg", label: "Development records", value: complete ? construction.length : null, note: "From site preparation to fit-out" },
+        { icon: "/icons/learning-community.svg", label: "Learning & community", value: complete ? community.length : null, note: "Records of life at the hub" },
     ];
 
     return <>
@@ -107,9 +120,12 @@ export default function ImpactContent({ gardens, initialGardenId = "all", previe
         <section id="community-work" className="scroll-mt-24 px-4 py-20 md:py-28" data-testid="impact-community">
             <div className="mx-auto max-w-6xl"><p className="font-body text-xs font-bold uppercase tracking-widest text-primary">03 / Community in action · {scopeName}</p><h2 className="mt-4 max-w-3xl font-heading text-4xl font-bold leading-tight md:text-6xl">Behind every number,<br />people doing the work.</h2><p className="mt-5 max-w-2xl font-body text-lg leading-relaxed text-dark/75">{preview ? "A shared feed brings activity from different hubs together. Choose one hub above to follow its community." : "Workshops, everyday access and the care that keeps a shared space useful. Explore the activities our community has documented."}</p>
                 {communityFeed.length !== community.length && <a href="#hub-development" className={buttonStyles({ variant: "text", className: "mt-3 px-0 underline underline-offset-4" })}>See opening records in the hub timelines</a>}
-                {communityFeed.length > 0 && <ul className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">{communityFeed.map(record => <li key={record.id}><ImpactRecordCard record={record} gardenName={gardenName(record.gardenId)} preview={preview} /></li>)}</ul>}
+                {recordPeriods.length > 1 && <label className="mt-8 flex max-w-xs flex-col gap-2 font-body text-sm font-bold">Filter activity by month<select aria-label="Filter activity by month" value={recordPeriod} onChange={event => { setRecordPeriod(event.target.value); setCommunityLimit(RECORD_PAGE_SIZE); setOtherLimit(RECORD_PAGE_SIZE); }} className={`${selectStyle} font-normal`}><option value="all">All reporting dates</option>{recordPeriods.map(period => <option key={period} value={period}>{new Intl.DateTimeFormat("en", { month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(`${period}-01T00:00:00Z`))}</option>)}</select></label>}
+                {visibleCommunity.length > 0 && <ul className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">{visibleCommunity.map(record => <li key={record.id}><ImpactRecordCard record={record} gardenName={gardenName(record.gardenId)} preview={preview} /></li>)}</ul>}
+                {filteredCommunity.length > visibleCommunity.length && <button type="button" onClick={() => setCommunityLimit(limit => limit + RECORD_PAGE_SIZE)} className={buttonStyles({ variant: "secondary", className: "mt-8" })}>Show more community records</button>}
                 {community.length === 0 && <p className="mt-8 font-body text-dark/70">{complete ? (preview ? "No example learning or community records for this selection yet." : "No approved learning or community records for this selection yet.") : "Community records are temporarily unavailable."}</p>}
-                {unclassified.length > 0 && <div className="mt-12"><h3 className="font-heading text-2xl font-bold">More recorded work</h3><ul className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">{unclassified.map(record => <li key={record.id}><ImpactRecordCard record={record} gardenName={gardenName(record.gardenId)} preview={preview} /></li>)}</ul></div>}
+                {recordPeriod !== "all" && filteredCommunity.length === 0 && filteredUnclassified.length === 0 && <p className="mt-8 rounded-2xl border border-primary/15 bg-primary/5 p-5 font-body text-dark/70">No work records are available for this reporting month.</p>}
+                {visibleUnclassified.length > 0 && <div className="mt-12"><h3 className="font-heading text-2xl font-bold">More recorded work</h3><ul className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">{visibleUnclassified.map(record => <li key={record.id}><ImpactRecordCard record={record} gardenName={gardenName(record.gardenId)} preview={preview} /></li>)}</ul>{filteredUnclassified.length > visibleUnclassified.length && <button type="button" onClick={() => setOtherLimit(limit => limit + RECORD_PAGE_SIZE)} className={buttonStyles({ variant: "secondary", className: "mt-8" })}>Show more recorded work</button>}</div>}
             </div>
         </section>
         <LocallyRooted />

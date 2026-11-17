@@ -248,11 +248,17 @@ export default function Footer({ showMemorial = true }: { showMemorial?: boolean
                 </section>
 
                 <div className="mt-8 flex w-full flex-col items-center justify-between gap-4 border-t border-dark/10 pt-8 md:flex-row">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 text-left">
                         <Image src="/Tas Logo-green.png" alt="TAS Logo" width={40} height={40} className="h-10 w-10 rounded-full" />
-                        <p className="font-body text-sm font-medium text-dark/50">
-                            Tech and Sun © 2026.
-                        </p>
+                        <div className="text-center md:text-left">
+    <p className="font-body text-sm font-medium text-dark/50">
+        Tech and Sun © 2026.
+    </p>
+    <p className="mt-1 font-body text-xs leading-relaxed text-dark/45">
+        Technology and Solar Support Foundation · <br />Incorporated Trustee · CAC IT No. 9929336
+    </p>
+    
+</div>
                     </div>
                     <div className="flex items-center gap-4">
                         <a href="https://x.com/techandsunhubs" target="_blank" rel="noopener noreferrer" className="text-dark/40 transition-colors hover:text-primary" aria-label="Twitter">
@@ -266,6 +272,7 @@ export default function Footer({ showMemorial = true }: { showMemorial?: boolean
                             <Youtube className="h-7 w-7" />
                         </a>
                     </div>
+                    
                 </div>
             </div>
         </footer>

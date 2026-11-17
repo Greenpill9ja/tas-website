@@ -42,12 +42,12 @@ export default function ImpactRecordGallery({ media, index, onMove, title, step,
 
     return <figure
         aria-label={`Images for ${title}`}
-        className={`relative bg-primary/5 ${expanded ? "aspect-square max-h-96 overflow-hidden rounded-2xl md:aspect-video" : "aspect-video"}`}
+        className={`relative w-full max-w-full overflow-hidden bg-primary/5 ${expanded ? "aspect-square max-h-96 rounded-2xl md:aspect-video" : "aspect-video"}`}
     >
         <RecordImage key={src} src={src} alt={alt} expanded={expanded} />
         {step !== undefined && <span className="absolute left-4 top-4 flex h-12 w-12 items-center justify-center rounded-full bg-secondary font-heading text-lg font-bold text-dark">{String(step).padStart(2, "0")}</span>}
         {media.length > 1 && <>
-            <div className="absolute inset-x-3 bottom-3 flex items-center justify-between gap-2">
+            <div className="absolute inset-x-3 bottom-3 flex min-w-0 items-center justify-between gap-2">
                 <button type="button" className={arrowStyle} aria-label="Previous image" onClick={() => onMove(-1)}>
                     <ChevronLeft size={24} aria-hidden="true" />
                 </button>

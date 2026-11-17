@@ -33,6 +33,13 @@ for (const route of ["/", "/about", "/impact"]) {
         await expect(desktopNav.getByRole("link")).toHaveText(expectedLinks);
         if (route === "/") await expect(desktopNav.getByRole("link", { name: "Home", exact: true })).toHaveCount(0);
     });
+
+    test(`${route} has no page-level horizontal overflow on mobile`, async ({ page }) => {
+        await page.setViewportSize({ width: 393, height: 852 });
+        await page.goto(route);
+        const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+        expect(overflow).toBeLessThanOrEqual(1);
+    });
 }
 
 test("Impact shows real evidence sections without preview controls", async ({ page }) => {
@@ -84,7 +91,10 @@ test("Impact image selection carries between the card, desktop modal and mobile 
     const mobileBounds = await dialog.boundingBox();
     expect(mobileBounds?.width).toBe(393);
     expect(mobileBounds!.y + mobileBounds!.height).toBeCloseTo(852, 0);
+    expect(await dialog.evaluate(element => element.scrollWidth - element.clientWidth)).toBeLessThanOrEqual(1);
+    await expect.poll(() => page.evaluate(() => ({ body: document.body.style.overflow, root: document.documentElement.style.overflow }))).toEqual({ body: "hidden", root: "hidden" });
     await expect(dialog.getByText("Image 1 of 2", { exact: true })).toBeVisible();
     await dialog.getByRole("button", { name: "Close impact details" }).click();
     await expect(dialog).not.toBeVisible();
+    await expect.poll(() => page.evaluate(() => ({ body: document.body.style.overflow, root: document.documentElement.style.overflow }))).toEqual({ body: "", root: "" });
 });
