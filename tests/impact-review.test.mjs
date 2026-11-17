@@ -42,4 +42,30 @@ describe("Impact review 48–53", () => {
         expect(page).toContain("inline-flex max-w-full flex-wrap");
         expect(page).not.toContain("&nbsp;");
     });
+    test("impact activity uses semantic metric artwork, date filtering and progressive pagination", async () => {
+        const source = await Bun.file("src/components/impact/ImpactContent.tsx").text();
+        for (const icon of ["/icons/approved-work.svg", "/icons/hub-development.svg", "/icons/learning-community.svg"]) expect(source).toContain(icon);
+        expect(source).not.toContain('/Internet (Starlink) green.png');
+        for (const control of ["Filter activity by month", "All reporting dates", "Show more community records", "Show more recorded work"]) expect(source).toContain(control);
+        expect(source).toContain("RECORD_PAGE_SIZE");
+    });
+    test("about gallery omits the tilted interior photographs", async () => {
+        const source = await Bun.file("src/components/about/AboutHeroCarousel.tsx").text();
+        expect(source).not.toContain("/album/07-power-inverter.jpeg");
+        expect(source).not.toContain("/album/10-interior-desks.jpeg");
+    });
+    test("footer presents the verified incorporated-trustee identity", async () => {
+        const source = await Bun.file("src/components/sections/Footer.tsx").text();
+        expect(source).toContain("Technology and Solar Support Foundation");
+        expect(source).toContain("Incorporated Trustee");
+        expect(source).toContain("CAC IT No. 9929336");
+        expect(source).toContain("© 2026");
+    });
+    test("operating documents remain unpublished while they are still being developed", async () => {
+        const source = await Bun.file("src/app/about/page.tsx").text();
+        expect(source).toContain("See hub activities");
+        expect(source).not.toContain("NEXT_PUBLIC_TAS_OPERATING_DOCUMENTS_URL");
+        expect(source).not.toContain("Read our public operating documents");
+        expect(source).not.toContain('href="/#activities">Read our documentation');
+    });
 });

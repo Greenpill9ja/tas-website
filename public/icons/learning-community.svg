@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" fill="none" role="img" aria-labelledby="title">
+  <title id="title">Learning and community</title>
+  <defs>
+    <linearGradient id="blue" x1="18" y1="15" x2="96" y2="104" gradientUnits="userSpaceOnUse"><stop stop-color="#E5F1FF"/><stop offset=".46" stop-color="#A5D5F5"/><stop offset="1" stop-color="#2446A8"/></linearGradient>
+    <linearGradient id="blueDeep" x1="30" y1="25" x2="92" y2="100" gradientUnits="userSpaceOnUse"><stop stop-color="#6F9FE9"/><stop offset="1" stop-color="#2446A8"/></linearGradient>
+    <linearGradient id="yellow" x1="40" y1="12" x2="78" y2="70" gradientUnits="userSpaceOnUse"><stop stop-color="#FFF5A3"/><stop offset="1" stop-color="#FFD700"/></linearGradient>
+    <radialGradient id="yellowGlow"><stop stop-color="#FFF8B8" stop-opacity=".9"/><stop offset="1" stop-color="#FFD700" stop-opacity="0"/></radialGradient>
+  </defs>
+  <ellipse cx="60" cy="105" rx="33" ry="5" fill="#2446A8" opacity=".10"/>
+  <path d="M60 51c-11-8-25-9-40-4v36c15-5 29-4 40 4V51Z" fill="url(#blue)"/>
+  <path d="M60 51c11-8 25-9 40-4v36c-15-5-29-4-40 4V51Z" fill="url(#blueDeep)"/>
+  <path d="M60 51v36" stroke="#FFF" stroke-width="3" opacity=".78"/>
+  <circle cx="60" cy="25" r="16" fill="url(#yellowGlow)"/>
+  <circle cx="60" cy="25" r="6" fill="url(#yellow)"/>
+  <path d="M60 13V9M48 17l-3-3M72 17l3-3" stroke="#FFD700" stroke-width="2.8" stroke-linecap="round"/>
+</svg>

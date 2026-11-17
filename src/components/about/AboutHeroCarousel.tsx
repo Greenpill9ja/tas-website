@@ -12,22 +12,20 @@ interface MediaItem {
 }
 
 const photos: MediaItem[] = [
-    { src: "/album/12-hub-video-highlight.mp4", label: "02. Hub Build Motion Clip", alt: "Video highlight of hub assembly", isVideo: true },
-    { src: "/album/02-ground-foundation.jpeg", label: "03. Site Groundwork & Foundation", alt: "Raw shipping container placed on concrete foundation" },
-    { src: "/album/03-window-framing.jpeg", label: "04. Structural Cutouts & Welding", alt: "Cutting window openings and welding steel door frames" },
-    { src: "/album/04-solar-canopy.jpeg", label: "05. Solar Roof Canopy Framing", alt: "Mounting overhead roof structure for solar panels" },
-    { src: "/album/05-rooftop-solar.jpeg", label: "06. Solar Panel Array Mounting", alt: "Rooftop solar panel array installation" },
-    { src: "/album/06-bare-interior-wood.jpeg", label: "07. Interior Insulation & Wood Paneling", alt: "Bare timber wall paneling and carpenter tools inside container" },
-    { src: "/album/07-power-inverter.jpeg", label: "08. Solar Inverter & Battery Bank", alt: "Installing smart inverter and lithium battery bank" },
-    { src: "/album/08-starlink-unboxing.jpeg", label: "09. Starlink Hardware Unboxing", alt: "Unboxing Starlink satellite dish hardware" },
-    { src: "/album/09-starlink-mounted.jpeg", label: "10. High-Speed Satellite Antenna", alt: "Starlink dish installed on container roof" },
-    { src: "/album/10-interior-desks.jpeg", label: "11. Workstation Partition Setup", alt: "Finished interior wooden desk partitions and lighting" },
-    { src: "/album/01-izzy-memorial.jpeg", label: "01. Founder Legacy — In Loving Memory", alt: "Memorial resting place of TAS Founder Obi Izzy Onwuzurike" },
-    { src: "/album/11-izzy-framed-portrait.jpeg", label: "12. Founder's Portrait Wall Frame", alt: "Framed portrait of Founder Obi Izzy Onwuzurike mounted on the interior wall" },
+    { src: "/album/12-hub-video-highlight.mp4", label: "Hub build motion clip", alt: "Video highlight of hub assembly", isVideo: true },
+    { src: "/album/02-ground-foundation.jpeg", label: "Site groundwork and foundation", alt: "Raw shipping container placed on concrete foundation" },
+    { src: "/album/03-window-framing.jpeg", label: "Structural cutouts and welding", alt: "Cutting window openings and welding steel door frames" },
+    { src: "/album/04-solar-canopy.jpeg", label: "Solar roof canopy framing", alt: "Mounting overhead roof structure for solar panels" },
+    { src: "/album/05-rooftop-solar.jpeg", label: "Solar panel array mounting", alt: "Rooftop solar panel array installation" },
+    { src: "/album/06-bare-interior-wood.jpeg", label: "Interior insulation and wood paneling", alt: "Bare timber wall paneling and carpenter tools inside container" },
+    { src: "/album/08-starlink-unboxing.jpeg", label: "Starlink hardware unboxing", alt: "Unboxing Starlink satellite dish hardware" },
+    { src: "/album/09-starlink-mounted.jpeg", label: "High-speed satellite antenna", alt: "Starlink dish installed on container roof" },
+    { src: "/album/01-izzy-memorial.jpeg", label: "Founder legacy — in loving memory", alt: "Memorial resting place of TAS Founder Obi Izzy Onwuzurike" },
+    { src: "/album/11-izzy-framed-portrait.jpeg", label: "Founder's portrait", alt: "Framed portrait of Founder Obi Izzy Onwuzurike mounted on the interior wall" },
     // { src: "/album/13-hub-tour.mp4", label: "13. Hub Walkthrough Motion Clip", alt: "Video walkthrough of hub interior", isVideo: true },
-    { src: "/album/14-completed-exterior.jpeg", label: "13. Finished TAS Solar Hub", alt: "Completed green solar-powered TAS container hub at golden hour" },
-    { src: "/album/15-active-workspace.jpeg", label: "14. Active Community Workspace", alt: "Students and builders working at laptop stations inside active hub" },
-    { src: "/album/16-community-launch.jpeg", label: "15. Community Launch Celebration", alt: "Community group photo celebrating launch outside TAS hub" },
+    { src: "/album/14-completed-exterior.jpeg", label: "Finished TAS solar hub", alt: "Completed green solar-powered TAS container hub at golden hour" },
+    { src: "/album/15-active-workspace.jpeg", label: "Active community workspace", alt: "Students and builders working at laptop stations inside active hub" },
+    { src: "/album/16-community-launch.jpeg", label: "Community launch celebration", alt: "Community group photo celebrating launch outside TAS hub" },
 ];
 
 const AUTOPLAY_INTERVAL_MS = 5000; // 5 seconds per slide once manually enabled
