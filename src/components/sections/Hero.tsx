@@ -209,7 +209,7 @@ export default function Hero() {
                                 {[
                                     { name: "Greenpill Network", logo: "/greenpill-network.png" },
                                     { name: "Greenpill Nigeria", logo: "/greenpillnaija.png" },
-                                    { name: "Greenpill Dev Guild", logo: "/Dev-Guild.png" },
+                                    { name: "Green Goods", logo: "/green-goods.webp" },
                                     { name: "Localism", logo: "/Localism.png" },
                                     { name: "M3tering Protocol", logo: "/m3tering protocol.png" },
                                     { name: "Switch Electric", logo: "/switch.png" }
@@ -225,7 +225,7 @@ export default function Hero() {
                                 {[
                                     { name: "Greenpill Network", logo: "/greenpill-network.png" },
                                     { name: "Greenpill Nigeria", logo: "/greenpillnaija.png" },
-                                    { name: "Greenpill Dev Guild", logo: "/Dev-Guild.png" },
+                                    { name: "Green Goods", logo: "/green-goods.webp" },
                                     { name: "Localism", logo: "/Localism.png" },
                                     { name: "M3tering Protocol", logo: "/m3tering protocol.png" },
                                     { name: "Switch Electric", logo: "/switch.png" }

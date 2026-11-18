@@ -30,6 +30,6 @@ export default async function ImpactPage({ searchParams }: { searchParams: Promi
                 <LiveImpactContent hub={typeof hub === "string" ? hub : "all"} />
             </Suspense>
         </main>
-        <Footer showMemorial={false} />
+        <Footer showMemorial={false} showTeam={false} />
     </>;
 }

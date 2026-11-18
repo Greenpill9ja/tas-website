@@ -12,14 +12,14 @@ describe("Impact review 48–53", () => {
     test("the native mobile dialog has a title, trigger state and close action", async () => {
         const source = await Bun.file("src/components/SiteHeader.tsx").text();
         for (const expected of ["<dialog", "showModal()", "aria-expanded={isOpen}", 'aria-controls="site-navigation-drawer"', 'aria-labelledby="site-navigation-title"', 'aria-label="Close navigation menu"', "onClose=", "data-lenis-prevent"]) expect(source).toContain(expected);
-        for (const label of ["Home", "About us", "Impact"]) expect(source).toContain(`label: "${label}"`);
+        for (const label of ["Home", "About", "Impact"]) expect(source).toContain(`label: "${label}"`);
         expect(source).toContain('pathname === link.href ? "page" : undefined');
     });
-    test("both navigation layouts hide Home only on home and list Impact before About us", async () => {
+    test("both navigation layouts hide Home only on home and list Impact before About", async () => {
         const source = await Bun.file("src/components/SiteHeader.tsx").text();
         expect(source).toContain('links.filter(link => link.href !== "/" || pathname !== "/")');
         expect(source).toContain("visibleLinks.map(link =>");
-        expect(source.indexOf('label: "Impact"')).toBeLessThan(source.indexOf('label: "About us"'));
+        expect(source.indexOf('label: "Impact"')).toBeLessThan(source.indexOf('label: "About"'));
         expect(source).toContain("{navigation()}");
         expect(source).toContain("{navigation(true)}");
     });
@@ -39,14 +39,14 @@ describe("Impact review 48–53", () => {
         const page = await Bun.file("src/app/about/page.tsx").text();
         expect(carousel).toContain('className="min-w-0 w-full max-w-full"');
         expect(carousel).toContain("overscroll-x-contain");
-        expect(page).toContain("inline-flex max-w-full flex-wrap");
+        expect(page).not.toContain("Community-led infrastructure · Access is free");
         expect(page).not.toContain("&nbsp;");
     });
     test("impact activity uses semantic metric artwork, date filtering and progressive pagination", async () => {
         const source = await Bun.file("src/components/impact/ImpactContent.tsx").text();
         for (const icon of ["/icons/approved-work.svg", "/icons/hub-development.svg", "/icons/learning-community.svg"]) expect(source).toContain(icon);
         expect(source).not.toContain('/Internet (Starlink) green.png');
-        for (const control of ["Filter activity by month", "All reporting dates", "Show more community records", "Show more recorded work"]) expect(source).toContain(control);
+        for (const control of ["Filter by recorded month", "All recorded months", "Show more community records", "Show more recorded work"]) expect(source).toContain(control);
         expect(source).toContain("RECORD_PAGE_SIZE");
     });
     test("about gallery omits the tilted interior photographs", async () => {

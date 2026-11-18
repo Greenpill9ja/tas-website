@@ -5,7 +5,7 @@ for (const route of ["/", "/about", "/impact"]) {
     test(`shared navigation and mobile drawer on ${route}`, async ({ page }) => {
         await page.setViewportSize({ width: 393, height: 852 });
         await page.goto(route);
-        const expectedLinks = route === "/" ? ["Impact", "About us"] : ["Home", "Impact", "About us"];
+        const expectedLinks = route === "/" ? ["Impact", "About"] : ["Home", "Impact", "About"];
         const trigger = page.getByRole("button", { name: "Open navigation menu" });
         await trigger.click();
         const dialog = page.getByRole("dialog", { name: "Explore Tech & Sun" });
@@ -23,7 +23,7 @@ for (const route of ["/", "/about", "/impact"]) {
         await expect(dialog).not.toBeVisible();
         await expect(trigger).toBeFocused();
         await trigger.click();
-        await dialog.getByRole("link", { name: "About us", exact: true }).click();
+        await dialog.getByRole("link", { name: "About", exact: true }).click();
         await expect(page).toHaveURL(/\/about$/);
         await expect(dialog).not.toBeVisible();
         await page.setViewportSize({ width: 1440, height: 900 });
