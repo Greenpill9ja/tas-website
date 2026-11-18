@@ -17,10 +17,10 @@ describe("multi-hub impact selection", () => {
         metric(html, "Learning &amp; community", "5");
         expect(html.match(/data-testid="impact-record"/g)).toHaveLength(10);
         expect(html.match(/data-testid="impact-hub-timeline"/g)).toHaveLength(3);
-        expect(html.match(/<blockquote/g)).toHaveLength(3);
+        expect(html).not.toContain("<blockquote");
     });
 
-    test("a hub selection scopes counts, records and testimonials together", () => {
+    test("a hub selection scopes counts and records without exposing sample testimonials", () => {
         const html = render("example-b");
         metric(html, "Active hubs", "1");
         metric(html, "Example work records", "3");
@@ -30,8 +30,22 @@ describe("multi-hub impact selection", () => {
         expect(html).toContain("A peer learning session");
         expect(html).not.toContain("Solar power comes online");
         expect(html).not.toContain("Preparing the next site");
+        expect(html).not.toContain("<blockquote");
+        expect(html).not.toContain("Reliable power and internet give me");
+    });
+
+    test("approved consented testimonials are scoped to the selected hub", () => {
+        // Synthetic test-only approval fixtures; never exported into site content.
+        const quotes = previewTestimonials.map(quote => ({ ...quote, kind: "approved", sourceUrl: "https://example.org/testimonial", consentRecordedAt: "2026-11-18" }));
+        const html = renderToStaticMarkup(createElement(ImpactContent, { gardens: previewGardens, initialGardenId: "example-b", preview: true, quotes }));
         expect(html.match(/<blockquote/g)).toHaveLength(1);
         expect(html).not.toContain("Reliable power and internet give me");
+    });
+
+    test("unconsented or unsafe-source testimonials remain hidden", () => {
+        const quotes = previewTestimonials.map((quote, index) => ({ ...quote, kind: "approved", sourceUrl: index === 0 ? "javascript:alert(1)" : "https://example.org/testimonial", consentRecordedAt: index === 0 ? "2026-11-18" : "" }));
+        const html = renderToStaticMarkup(createElement(ImpactContent, { gardens: previewGardens, quotes }));
+        expect(html).not.toContain("<blockquote");
     });
 
     test("a building hub retains construction evidence with an honest community empty state", () => {

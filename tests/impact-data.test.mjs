@@ -21,11 +21,11 @@ describe("impact presentation boundaries", () => {
         expect(html).toContain("No approved development records");
         expect(html).not.toContain("temporarily unavailable");
     });
-    test("requested mock testimonials are visibly distinguished from member testimony", () => {
+    test("sample testimonials remain hidden until approved with consent", () => {
         const html = renderToStaticMarkup(createElement(ImpactContent, { gardens: [unavailable] }));
-        expect(html).toContain('id="community-voices"');
-        expect(html.match(/Illustrative quote/g)).toHaveLength(3);
-        expect(html.match(/Sample member testimonial/g)).toHaveLength(3);
+        expect(html).not.toContain('id="community-voices"');
+        expect(html).not.toContain("Illustrative quote");
+        expect(html).not.toContain("Sample member testimonial");
     });
     test("a stale successful snapshot keeps its counts and clearly reports the refresh", () => {
         const html = renderToStaticMarkup(createElement(ImpactContent, { gardens: [{ ...unavailable, status: "stale", approvedWorkCount: 16, historyComplete: true }] }));
@@ -69,13 +69,14 @@ describe("impact presentation boundaries", () => {
         expect(html.indexOf("Later workshop")).toBeLessThan(html.indexOf("Earlier workshop"));
         expect(html).toContain('<option value="next">Next TAS garden</option>');
     });
-    test("all routes retain one shared footer and only impact suppresses its memorial", async () => {
+    test("all routes share a footer while About keeps its own tribute and Impact hides the team", async () => {
         for (const route of ["src/app/page.tsx", "src/app/about/page.tsx", "src/app/impact/page.tsx"]) {
             const source = await Bun.file(route).text();
             expect(source).toContain('import Footer from "@/components/sections/Footer"');
             expect(source.match(/<Footer(?:\s[^>]*)?\s*\/>/g)).toHaveLength(1);
             expect(source).not.toContain("<footer");
-            expect(source.includes("showMemorial={false}")).toBe(route.includes("/impact/"));
+            expect(source.includes("showMemorial={false}")).toBe(route !== "src/app/page.tsx");
+            expect(source.includes("showTeam={false}")).toBe(route.includes("/impact/"));
         }
     });
 });
