@@ -20,6 +20,6 @@ export default async function ImpactPreviewPage({ searchParams }: { searchParams
             <ImpactHero preview />
             <ImpactContent key={typeof hub === "string" ? hub : "all"} gardens={previewGardens} initialGardenId={typeof hub === "string" ? hub : "all"} preview quotes={previewTestimonials} />
         </main>
-        <Footer showMemorial={false} />
+        <Footer showMemorial={false} showTeam={false} />
     </>;
 }

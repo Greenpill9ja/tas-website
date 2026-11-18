@@ -15,7 +15,7 @@ type TeamMember = {
     linkedin?: string;
 };
 
-export default function Footer({ showMemorial = true }: { showMemorial?: boolean }) {
+export default function Footer({ showMemorial = true, showTeam = true }: { showMemorial?: boolean; showTeam?: boolean }) {
     const [formState, formAction, isPending] = useActionState(
         async (_prev: { success?: boolean; error?: string } | null, formData: FormData) => {
             return submitContactForm(formData);
@@ -77,7 +77,7 @@ export default function Footer({ showMemorial = true }: { showMemorial?: boolean
     return (
         <footer className="relative overflow-hidden border-t border-dark/10 bg-vibrant pb-8 pt-24">
             <div className="mx-auto flex w-full max-w-6xl flex-col items-center px-4 text-center">
-                <section className="mb-16 w-full" aria-labelledby="team-heading">
+                {showTeam && <section className="mb-16 w-full" aria-labelledby="team-heading">
                     <h2 id="team-heading" className="mb-12 font-heading text-4xl font-bold text-dark md:text-5xl">
                         Meet the team
                     </h2>
@@ -142,7 +142,7 @@ export default function Footer({ showMemorial = true }: { showMemorial?: boolean
                             </div>
                         ))}
                     </div>
-                </section>
+                </section>}
 
                 {showMemorial && <section className="mb-16 w-full max-w-3xl" aria-label="In loving memory of Izzy">
                     <div className="relative overflow-hidden rounded-[2rem] border border-primary/30 bg-primary/90 px-8 py-10 text-left text-white shadow-2xl">
@@ -248,7 +248,7 @@ export default function Footer({ showMemorial = true }: { showMemorial?: boolean
                 </section>
 
                 <div className="mt-8 flex w-full flex-col items-center justify-between gap-4 border-t border-dark/10 pt-8 md:flex-row">
-                    <div className="flex items-center gap-3 text-left">
+                    <div className="flex flex-col items-center gap-3 text-center md:flex-row md:text-left">
                         <Image src="/Tas Logo-green.png" alt="TAS Logo" width={40} height={40} className="h-10 w-10 rounded-full" />
                         <div className="text-center md:text-left">
     <p className="font-body text-sm font-medium text-dark/50">

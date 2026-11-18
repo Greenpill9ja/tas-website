@@ -12,6 +12,9 @@ interface MediaItem {
 }
 
 const photos: MediaItem[] = [
+    { src: "/album/15-active-workspace.jpeg", label: "Active community workspace", alt: "Students and builders working at laptop stations inside active hub" },
+    { src: "/album/14-completed-exterior.jpeg", label: "Finished TAS solar hub", alt: "Completed green solar-powered TAS container hub at golden hour" },
+    { src: "/album/16-community-launch.jpeg", label: "Community launch celebration", alt: "Community group photo celebrating launch outside TAS hub" },
     { src: "/album/12-hub-video-highlight.mp4", label: "Hub build motion clip", alt: "Video highlight of hub assembly", isVideo: true },
     { src: "/album/02-ground-foundation.jpeg", label: "Site groundwork and foundation", alt: "Raw shipping container placed on concrete foundation" },
     { src: "/album/03-window-framing.jpeg", label: "Structural cutouts and welding", alt: "Cutting window openings and welding steel door frames" },
@@ -20,12 +23,7 @@ const photos: MediaItem[] = [
     { src: "/album/06-bare-interior-wood.jpeg", label: "Interior insulation and wood paneling", alt: "Bare timber wall paneling and carpenter tools inside container" },
     { src: "/album/08-starlink-unboxing.jpeg", label: "Starlink hardware unboxing", alt: "Unboxing Starlink satellite dish hardware" },
     { src: "/album/09-starlink-mounted.jpeg", label: "High-speed satellite antenna", alt: "Starlink dish installed on container roof" },
-    { src: "/album/01-izzy-memorial.jpeg", label: "Founder legacy — in loving memory", alt: "Memorial resting place of TAS Founder Obi Izzy Onwuzurike" },
-    { src: "/album/11-izzy-framed-portrait.jpeg", label: "Founder's portrait", alt: "Framed portrait of Founder Obi Izzy Onwuzurike mounted on the interior wall" },
     // { src: "/album/13-hub-tour.mp4", label: "13. Hub Walkthrough Motion Clip", alt: "Video walkthrough of hub interior", isVideo: true },
-    { src: "/album/14-completed-exterior.jpeg", label: "Finished TAS solar hub", alt: "Completed green solar-powered TAS container hub at golden hour" },
-    { src: "/album/15-active-workspace.jpeg", label: "Active community workspace", alt: "Students and builders working at laptop stations inside active hub" },
-    { src: "/album/16-community-launch.jpeg", label: "Community launch celebration", alt: "Community group photo celebrating launch outside TAS hub" },
 ];
 
 const AUTOPLAY_INTERVAL_MS = 5000; // 5 seconds per slide once manually enabled

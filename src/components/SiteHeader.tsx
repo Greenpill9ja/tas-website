@@ -10,7 +10,7 @@ import { buttonStyles } from "@/components/ui/button-styles";
 const links = [
     { href: "/", label: "Home" },
     { href: "/impact", label: "Impact" },
-    { href: "/about", label: "About us" },
+    { href: "/about", label: "About" },
 ];
 
 export default function SiteHeader() {
