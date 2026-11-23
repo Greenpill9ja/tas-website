@@ -16,9 +16,48 @@ export const tasGardens: GardenDefinition[] = [
 
 // Publish only reviewed reports. Earlier September fixtures lacked a confirmed source.
 export const monthlyReports: MonthlyReport[] = [];
-// Staging-only illustrations requested by Afo. Replace with consented member quotes.
+// Nansel confirmed website consent for these seven X posts on 2026-11-23 (GRTH-109).
 export const testimonials: Testimonial[] = [
-    { kind: "sample", gardenId: "awka", quote: "Reliable power and internet give me space to focus on learning and building.", attribution: "Sample member testimonial", },
-    { kind: "sample", gardenId: "awka", quote: "Having a place to meet other builders makes it easier to share ideas and work together.", attribution: "Sample member testimonial", },
-    { kind: "sample", gardenId: "awka", quote: "Learning alongside others helps me turn a new skill into something I can use.", attribution: "Sample member testimonial", },
+    {
+        kind: "approved", gardenId: "awka", consentRecordedAt: "2026-11-23",
+        portraitPath: "/images/testimonials/histoblogq.jpg",
+        attribution: "@Histoblogq", quote: "There is no longer much distance between my ideas and real products",
+        sourceUrl: "https://x.com/Histoblogq/status/2121953143747408176",
+    },
+    {
+        kind: "approved", gardenId: "awka", consentRecordedAt: "2026-11-23",
+        portraitPath: "/images/testimonials/emekadave01.jpg",
+        attribution: "@Emekadave01", quote: "I don’t know what I would’ve done without the constant electricity and internet.",
+        sourceUrl: "https://x.com/Emekadave01/status/2107538185941111119",
+    },
+    {
+        kind: "approved", gardenId: "awka", consentRecordedAt: "2026-11-23",
+        portraitPath: "/images/testimonials/iam_chuks_.jpg",
+        attribution: "@Iam_Chuks_", quote: "Thank you for the free internet connection, electricity and space to learn & work.",
+        sourceUrl: "https://x.com/Iam_Chuks_/status/2096899757935349880",
+    },
+    {
+        kind: "approved", gardenId: "awka", consentRecordedAt: "2026-11-23",
+        portraitPath: "/images/testimonials/solomon1249093.jpg",
+        attribution: "@Solomon1249093", quote: "The free high-speed internet and solar power mean I can stay productive even during power outages.",
+        sourceUrl: "https://x.com/Solomon1249093/status/2072807390706033133",
+    },
+    {
+        kind: "approved", gardenId: "awka", consentRecordedAt: "2026-11-23",
+        portraitPath: "/images/testimonials/francis44895568.jpg",
+        attribution: "@Francis44895568", quote: "Free workspace. Free internet. Zero stress. Sometimes, all you need is the right environment to stay consistent and grow.",
+        sourceUrl: "https://x.com/Francis44895568/status/2046157458377187551",
+    },
+    {
+        kind: "approved", gardenId: "awka", consentRecordedAt: "2026-11-23",
+        portraitPath: "/images/testimonials/emekadave01.jpg",
+        attribution: "@Emekadave01", quote: "With poor electricity here, their free WiFi + power has helped me stay consistent and keep building.",
+        sourceUrl: "https://x.com/Emekadave01/status/2041895413511331984",
+    },
+    {
+        kind: "approved", gardenId: "awka", consentRecordedAt: "2026-11-23",
+        portraitPath: "/images/testimonials/technovictorx.jpg",
+        attribution: "@TechnoVictorX", quote: "My new creative space 😌 Founder and Builders will rise from this space.",
+        sourceUrl: "https://x.com/TechnoVictorX/status/2034182844038128070",
+    },
 ];
