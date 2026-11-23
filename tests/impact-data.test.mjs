@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import ImpactContent from "../src/components/impact/ImpactContent.tsx";
-import { tasGardens } from "../src/lib/impact/gardens.ts";
+import { tasGardens, testimonials } from "../src/lib/impact/gardens.ts";
 
 const unavailable = { garden: tasGardens[0], submittedWorkCount: null, approvedWorkCount: null, approvedCountSource: null, records: [], historyComplete: false, status: "unavailable", fetchedAt: null };
 
@@ -22,10 +22,17 @@ describe("impact presentation boundaries", () => {
         expect(html).not.toContain("temporarily unavailable");
     });
     test("sample testimonials remain hidden until approved with consent", () => {
-        const html = renderToStaticMarkup(createElement(ImpactContent, { gardens: [unavailable] }));
+        const sample = { kind: "sample", gardenId: "awka", quote: "Illustrative quote", attribution: "Sample member testimonial" };
+        const html = renderToStaticMarkup(createElement(ImpactContent, { gardens: [unavailable], quotes: [sample] }));
         expect(html).not.toContain('id="community-voices"');
         expect(html).not.toContain("Illustrative quote");
         expect(html).not.toContain("Sample member testimonial");
+    });
+    test("all seven consented community posts link to their originals", () => {
+        const html = renderToStaticMarkup(createElement(ImpactContent, { gardens: [unavailable] }));
+        expect(html).toContain('id="community-voices"');
+        expect(new Set(testimonials.map(t => t.sourceUrl)).size).toBe(7);
+        for (const t of testimonials) expect(html).toContain('href="' + t.sourceUrl + '"');
     });
     test("a stale successful snapshot keeps its counts and clearly reports the refresh", () => {
         const html = renderToStaticMarkup(createElement(ImpactContent, { gardens: [{ ...unavailable, status: "stale", approvedWorkCount: 16, historyComplete: true }] }));

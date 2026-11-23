@@ -53,4 +53,4 @@ export type Testimonial = {
     gardenId: string;
     quote: string;
     attribution: string;
-} & ({ kind: "approved"; sourceUrl: string; consentRecordedAt: string } | { kind: "sample" });
+} & ({ kind: "approved"; /** Local contributor portrait separately approved for website use. */ portraitPath?: `/images/testimonials/${string}`; sourceUrl: string; consentRecordedAt: string } | { kind: "sample" });

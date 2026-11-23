@@ -133,12 +133,23 @@ export default function ImpactContent({ gardens, initialGardenId = "all", previe
             <div className="mx-auto max-w-6xl">
                 <p className="font-body text-xs font-bold uppercase tracking-widest text-primary">05 / Community voices · {scopeName}</p>
                 <h2 className="mt-4 font-heading text-4xl font-bold md:text-5xl">What access makes possible</h2>
-                <div className="mt-8 grid gap-6 md:grid-cols-3">
-                    {quotes.map(quote => <figure key={`${quote.gardenId}:${quote.quote}`} className="flex flex-col rounded-3xl bg-primary/5 p-6">
-                        {quote.kind === "sample" && <p className="mb-4 font-body text-xs font-bold uppercase tracking-wide text-primary">Illustrative quote · awaiting member testimonial</p>}
-                        <blockquote className="font-body text-lg leading-relaxed">“{quote.quote}”</blockquote>
-                        <figcaption className="mt-auto pt-5 font-body text-sm">{quote.kind === "approved" ? <a href={publicHttpsUrl(quote.sourceUrl)!} className="text-primary underline">{quote.attribution}</a> : quote.attribution} · {gardenName(quote.gardenId)}</figcaption>
-                    </figure>)}
+                <div className="mt-8 grid gap-4 md:grid-cols-2">
+                    {quotes.map((quote, index) => {
+                        const featured = index === 0 && quotes.length % 2 === 1;
+                        const portrait = quote.kind === "approved" ? quote.portraitPath : undefined;
+                        const initial = quote.attribution.replace(/^@/, "").slice(0, 1).toUpperCase();
+                        return <figure key={`${quote.gardenId}:${quote.quote}`} className={`flex min-w-0 flex-col justify-between rounded-3xl border p-5 sm:p-7 ${featured ? "border-primary bg-primary text-white md:col-span-2" : "border-primary/15 bg-primary/5 text-dark"}`}>
+                            <blockquote className={`max-w-3xl font-heading leading-snug ${featured ? "text-2xl sm:text-3xl" : "text-xl"}`}>“{quote.quote}”</blockquote>
+                            <figcaption className="mt-6 flex items-center justify-between gap-4">
+                                <span className="min-w-0 font-body text-sm">
+                                    {quote.kind === "approved" ? <a href={publicHttpsUrl(quote.sourceUrl)!} className="break-all font-bold underline underline-offset-4">{quote.attribution}</a> : quote.attribution}
+                                    <span className="mt-1 block">{gardenName(quote.gardenId)}</span>
+                                </span>
+                                {portrait ? <Image src={portrait} alt="" width={64} height={64} className="h-14 w-14 shrink-0 rounded-full object-cover sm:h-16 sm:w-16" /> :
+                                    <span aria-hidden="true" className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-white font-heading text-xl font-bold text-primary ring-1 ring-primary/15 sm:h-16 sm:w-16">{initial}</span>}
+                            </figcaption>
+                        </figure>;
+                    })}
                 </div>
             </div>
         </section>}
