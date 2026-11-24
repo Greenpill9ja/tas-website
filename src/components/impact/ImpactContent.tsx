@@ -133,12 +133,14 @@ export default function ImpactContent({ gardens, initialGardenId = "all", previe
             <div className="mx-auto max-w-6xl">
                 <p className="font-body text-xs font-bold uppercase tracking-widest text-primary">05 / Community voices · {scopeName}</p>
                 <h2 className="mt-4 font-heading text-4xl font-bold md:text-5xl">What access makes possible</h2>
-                <div className="mt-8 grid gap-4 md:grid-cols-2">
+                <div key={scopeName} id="testimonial-cards" role="region"
+                    aria-label="Community testimonials" tabIndex={0}
+                    className="relative mt-8 flex max-w-full snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain pb-2 md:grid md:grid-cols-2 md:snap-none md:overflow-visible md:pb-0">
                     {quotes.map((quote, index) => {
                         const featured = index === 0 && quotes.length % 2 === 1;
                         const portrait = quote.kind === "approved" ? quote.portraitPath : undefined;
                         const initial = quote.attribution.replace(/^@/, "").slice(0, 1).toUpperCase();
-                        return <figure key={`${quote.gardenId}:${quote.quote}`} className={`flex min-w-0 flex-col justify-between rounded-3xl border p-5 sm:p-7 ${featured ? "border-primary bg-primary text-white md:col-span-2" : "border-primary/15 bg-primary/5 text-dark"}`}>
+                        return <figure key={`${quote.gardenId}:${quote.quote}`} className={`flex w-full min-w-0 shrink-0 snap-start flex-col justify-between md:w-auto rounded-3xl border p-5 sm:p-7 ${featured ? "border-primary bg-primary text-white md:col-span-2" : "border-primary/15 bg-primary/5 text-dark"}`}>
                             <blockquote className={`max-w-3xl font-heading leading-snug ${featured ? "text-2xl sm:text-3xl" : "text-xl"}`}>“{quote.quote}”</blockquote>
                             <figcaption className="mt-6 flex items-center justify-between gap-4">
                                 <span className="min-w-0 font-body text-sm">
@@ -151,6 +153,25 @@ export default function ImpactContent({ gardens, initialGardenId = "all", previe
                         </figure>;
                     })}
                 </div>
+                {quotes.length > 1 && <div className="mt-3 flex items-center justify-between md:hidden">
+                    <span className="text-sm">Swipe to read more</span>
+                    <div className="flex gap-2">
+                        {([-1, 1] as const).map(step => <button key={step} type="button"
+                            aria-controls="testimonial-cards"
+                            aria-label={step < 0 ? "Previous testimonial" : "Next testimonial"}
+                            className="min-h-11 rounded-full border border-primary/30 px-3 text-sm font-bold text-primary"
+                            onClick={() => {
+                                const rail = document.getElementById("testimonial-cards");
+                                if (!rail) return;
+                                const cards = Array.from(rail.querySelectorAll("figure"));
+                                if (!cards.length) return;
+                                const current = cards.reduce((best, card, i) =>
+                                    Math.abs(card.offsetLeft - rail.scrollLeft) < Math.abs(cards[best].offsetLeft - rail.scrollLeft) ? i : best, 0);
+                                const next = cards[(current + step + cards.length) % cards.length];
+                                rail.scrollTo({ left: next.offsetLeft });
+                            }}>{step < 0 ? "Previous" : "Next"}</button>)}
+                    </div>
+                </div>}
             </div>
         </section>}
         <section id="how-we-measure" className="bg-primary/5 px-4 py-20 md:py-28"><div className="mx-auto max-w-6xl"><p className="font-body text-xs font-bold uppercase tracking-widest text-primary">06 / How we measure</p><h2 className="mt-4 font-heading text-4xl font-bold md:text-5xl">A record you can follow.</h2>{preview && <p className="mt-5 max-w-2xl font-body text-dark/70">This is how the live page uses evidence. The example cards above carry no approval or verification claim.</p>}<div className="mt-10 grid gap-8 md:grid-cols-3">{[
