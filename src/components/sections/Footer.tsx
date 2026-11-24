@@ -4,6 +4,7 @@ import { Twitter, Linkedin, Youtube } from "lucide-react";
 import { useActionState } from "react";
 import { submitContactForm } from "@/app/actions/contact";
 import Image from "next/image";
+import { buttonStyles } from "@/components/ui/button-styles";
 
 type TeamMember = {
     slug: string;
@@ -14,7 +15,7 @@ type TeamMember = {
     linkedin?: string;
 };
 
-export default function Footer() {
+export default function Footer({ showMemorial = true, showTeam = true }: { showMemorial?: boolean; showTeam?: boolean }) {
     const [formState, formAction, isPending] = useActionState(
         async (_prev: { success?: boolean; error?: string } | null, formData: FormData) => {
             return submitContactForm(formData);
@@ -76,7 +77,7 @@ export default function Footer() {
     return (
         <footer className="relative overflow-hidden border-t border-dark/10 bg-vibrant pb-8 pt-24">
             <div className="mx-auto flex w-full max-w-6xl flex-col items-center px-4 text-center">
-                <section className="mb-16 w-full" aria-labelledby="team-heading">
+                {showTeam && <section className="mb-16 w-full" aria-labelledby="team-heading">
                     <h2 id="team-heading" className="mb-12 font-heading text-4xl font-bold text-dark md:text-5xl">
                         Meet the team
                     </h2>
@@ -141,9 +142,9 @@ export default function Footer() {
                             </div>
                         ))}
                     </div>
-                </section>
+                </section>}
 
-                <section className="mb-16 w-full max-w-3xl" aria-label="In loving memory of Izzy">
+                {showMemorial && <section className="mb-16 w-full max-w-3xl" aria-label="In loving memory of Izzy">
                     <div className="relative overflow-hidden rounded-[2rem] border border-primary/30 bg-primary/90 px-8 py-10 text-left text-white shadow-2xl">
                         <div className="pointer-events-none absolute right-0 top-0 h-64 w-64 rounded-full bg-secondary/20 blur-[90px]" />
                         <div className="relative z-10 flex flex-col gap-6 sm:flex-row sm:items-center">
@@ -170,7 +171,7 @@ export default function Footer() {
                             </div>
                         </div>
                     </div>
-                </section>
+                </section>}
 
                 <section
                     id="contact"
@@ -237,7 +238,7 @@ export default function Footer() {
                                 <button
                                     type="submit"
                                     disabled={isPending}
-                                    className="w-full rounded-full bg-secondary px-8 py-4 font-heading text-lg font-bold text-dark shadow-lg transition-opacity disabled:opacity-60"
+                                    className={buttonStyles({ className: "w-full" })}
                                 >
                                     {isPending ? "Sending..." : "Send Message"}
                                 </button>
@@ -247,11 +248,17 @@ export default function Footer() {
                 </section>
 
                 <div className="mt-8 flex w-full flex-col items-center justify-between gap-4 border-t border-dark/10 pt-8 md:flex-row">
-                    <div className="flex items-center gap-3">
+                    <div className="flex flex-col items-center gap-3 text-center md:flex-row md:text-left">
                         <Image src="/Tas Logo-green.png" alt="TAS Logo" width={40} height={40} className="h-10 w-10 rounded-full" />
-                        <p className="font-body text-sm font-medium text-dark/50">
-                            Tech and Sun © 2026.
-                        </p>
+                        <div className="text-center md:text-left">
+    <p className="font-body text-sm font-medium text-dark/50">
+        Tech and Sun © 2026.
+    </p>
+    <p className="mt-1 font-body text-xs leading-relaxed text-dark/45">
+        Technology and Solar Support Foundation · <br />Incorporated Trustee · CAC IT No. 9929336
+    </p>
+    
+</div>
                     </div>
                     <div className="flex items-center gap-4">
                         <a href="https://x.com/techandsunhubs" target="_blank" rel="noopener noreferrer" className="text-dark/40 transition-colors hover:text-primary" aria-label="Twitter">
@@ -265,6 +272,7 @@ export default function Footer() {
                             <Youtube className="h-7 w-7" />
                         </a>
                     </div>
+                    
                 </div>
             </div>
         </footer>
